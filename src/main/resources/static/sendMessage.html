@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<!--http://10.88.27.192:8089/static/sendMessage.html-->
+	<head>
+		<meta charset="utf-8">
+		<title>Java后端WebSocket的Tomcat实现</title>
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+	</head>
+
+	<body>
+		<div id="main" style="width: 200px;height:80px;"></div>
+		一、建立链接<br/>
+		<input id="fromUser" type="text" /><a>谁发的，发送者的标识，数字字母,中文不行</a><br/>
+		<button onclick="connect()">建立WebSocket连接</button><br/>
+		二、发消息<br/>
+        <input id="toUser" type="text" /><a>发给谁的，接受者的标识，数字字母,中文不行</a><br/>
+        <input id="text" type="text" /><a>消息内容</a><br/>
+		<button onclick="send()">发送消息</button>
+		<hr/>
+		三、断开链接<br/>
+		<button onclick="closeWebSocket()">关闭WebSocket连接</button>
+		<hr/>
+		<div id="message"></div>
+	</body>
+	<script type="text/javascript">
+		var websocket = null;
+
+
+		//将消息显示在网页上
+		function setMessageInnerHTML(innerHTML) {
+			document.getElementById('message').innerHTML += innerHTML + '<br/>';
+		}
+
+		//关闭WebSocket连接
+		function closeWebSocket() {
+			websocket.close();
+		}
+
+		//发送消息
+		function send() {
+			var message = document.getElementById('text').value;
+			var formUser = document.getElementById('fromUser').value;
+			var toUser = document.getElementById('toUser').value;
+			websocket.send('{"type":"chat","data":{"fromUser":"'+formUser+'","toUser":"'+ toUser+'","content":"' + message + '"}}');
+			setMessageInnerHTML(message + "&#13;");
+		}
+
+		function connect(){
+			//判断当前浏览器是否支持WebSocket
+			if('WebSocket' in window) {
+				//改成你的地址
+				var fromUser = document.getElementById('fromUser').value;
+				websocket = new WebSocket("ws://10.88.27.192:8089/websocket/"+fromUser);
+
+				//连接发生错误的回调方法
+				websocket.onerror = function() {
+					setMessageInnerHTML("WebSocket连接发生错误");
+				};
+
+				//连接成功建立的回调方法
+				websocket.onopen = function() {
+					setMessageInnerHTML("WebSocket连接成功");
+				}
+				var U01data, Uidata, Usdata
+				//接收到消息的回调方法
+				websocket.onmessage = function(event) {
+					console.log(event);
+					setMessageInnerHTML(event);
+					setechart()
+				}
+
+				//连接关闭的回调方法
+				websocket.onclose = function() {
+					setMessageInnerHTML("WebSocket连接关闭");
+				}
+
+				//监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+				window.onbeforeunload = function() {
+					closeWebSocket();
+				}
+			} else {
+				alert('当前浏览器 Not support websocket')
+			}
+		}
+
+	</script>
+
+</html>
