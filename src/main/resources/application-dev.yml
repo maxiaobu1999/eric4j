@@ -12,7 +12,7 @@ const:
     baseUrl: http://${const.cloud.host}:${const.cloud.port}
   # 数据库地址
   sql:
-    host: ${const.cloud.host}
+    host: 106.14.58.169
     port: 3306
     baseUrl: http://${const.sql.host}:${const.sql.port}
   # 对象存储地址
@@ -30,12 +30,12 @@ spring:
   #数据库连接信息
   datasource:
     url: "jdbc:mysql://${const.sql.host}:${const.sql.port}/chinasoft?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true"
-    username: root
-    password: aA2243116
+    username: eric
+    password: 123
     driver-class-name: com.mysql.jdbc.Driver
   # redis缓存数据库
   redis:
-    host: 111.229.116.167
+    host: 106.14.58.169
     port: 6379
     password: 123456
   servlet:
