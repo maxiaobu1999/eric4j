@@ -29,7 +29,7 @@ spring:
       -dev
   #数据库连接信息
   datasource:
-    url: "jdbc:mysql://${const.sql.host}:${const.sql.port}/chinasoft?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true"
+    url: "jdbc:mysql://${const.sql.host}:${const.sql.port}/eric?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true"
     username: eric
     password: 123
     driver-class-name: com.mysql.jdbc.Driver
