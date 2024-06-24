@@ -2,6 +2,7 @@ package com.eric.controller;
 
 
 import com.eric.common.BaseResponse;
+import com.eric.common.TokenManager;
 import com.eric.repository.entity.UserEntity;
 import com.eric.service.SmsCodeService;
 import com.eric.service.UserService;
@@ -31,7 +32,8 @@ public class UserController extends BaseController {
     private SmsCodeService mSmsCodeService;
     @Resource
     private UserService mUserService;
-
+    @Resource
+    private TokenManager mTokenManager;
     /**
      * 获取验证码
      * http://localhost:8089/user/smsCode?phoneNum=15652814311
@@ -161,7 +163,9 @@ public class UserController extends BaseController {
             // 查userId
             String userId = userEntity.getUserId();
             // 更新的token
-            responseEntity = new BaseResponse<>(0, "登录成功", String.valueOf(userId));
+            String token = mTokenManager.generateToken(Long.parseLong(userId));
+
+            responseEntity = new BaseResponse<>(0, "登录成功", token);
             responseEntity.setData(userEntity);
         } catch (Exception e) {
             e.printStackTrace();
