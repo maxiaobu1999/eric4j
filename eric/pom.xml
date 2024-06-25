@@ -25,6 +25,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
+        <!--redis 连接池配置 ‘lettuce:’ -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+        </dependency>
 
         <!-- MySQL连接驱动 -->
         <dependency>
@@ -38,11 +43,11 @@
             <artifactId>fastjson</artifactId>
         </dependency>
 
-<!--        &lt;!&ndash; swagger3&ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>io.springfox</groupId>-->
-<!--            <artifactId>springfox-boot-starter</artifactId>-->
-<!--        </dependency>-->
+        <!--        &lt;!&ndash; swagger3&ndash;&gt;-->
+        <!--        <dependency>-->
+        <!--            <groupId>io.springfox</groupId>-->
+        <!--            <artifactId>springfox-boot-starter</artifactId>-->
+        <!--        </dependency>-->
 
         <!-- =========================================================== -->
         <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
@@ -58,24 +63,24 @@
         </dependency>
 
 
-<!--        &lt;!&ndash;web功能的起步依赖 含spring springMVC&ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-web</artifactId>-->
-<!--        </dependency>-->
+        <!--        &lt;!&ndash;web功能的起步依赖 含spring springMVC&ndash;&gt;-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.springframework.boot</groupId>-->
+        <!--            <artifactId>spring-boot-starter-web</artifactId>-->
+        <!--        </dependency>-->
 
-<!--        &lt;!&ndash;热部署配置&ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-devtools</artifactId>-->
-<!--        </dependency>-->
+        <!--        &lt;!&ndash;热部署配置&ndash;&gt;-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.springframework.boot</groupId>-->
+        <!--            <artifactId>spring-boot-devtools</artifactId>-->
+        <!--        </dependency>-->
 
-<!--        &lt;!&ndash;@ConfiguaritionProperties的执行器的配置，不配报警告，写yml可以有提示&ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-configuration-processor</artifactId>-->
-<!--            <optional>true</optional>-->
-<!--        </dependency>-->
+        <!--        &lt;!&ndash;@ConfiguaritionProperties的执行器的配置，不配报警告，写yml可以有提示&ndash;&gt;-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.springframework.boot</groupId>-->
+        <!--            <artifactId>spring-boot-configuration-processor</artifactId>-->
+        <!--            <optional>true</optional>-->
+        <!--        </dependency>-->
 
         <!-- 参数验证AOP处理 -->
         <dependency>
