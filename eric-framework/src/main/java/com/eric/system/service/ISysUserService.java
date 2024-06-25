@@ -1,13 +1,18 @@
-package com.eric.service;
+package com.eric.system.service;
 
 
 import com.eric.core.domain.entity.SysUser;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public interface UserService {
-
-    /**
+/**
+ * 用户 业务层
+ *
+ * @author zhimin
+ */
+public interface ISysUserService {
+       /**
      * 创建账户
      *
      * @param sysUser 账户信息
@@ -48,5 +53,4 @@ public interface UserService {
 //
 //    /** 更新账户，基于userId */
 //    void updateAccountByUserId(AccountInfo accountInfo);
-
 }

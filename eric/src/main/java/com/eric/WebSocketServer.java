@@ -1,7 +1,6 @@
 package com.eric;
 
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.eric.model.BaseMsg;
@@ -9,7 +8,7 @@ import com.eric.model.msg.ChatMessage;
 import com.eric.model.msg.ChatMsg;
 import com.eric.repository.IChatDao;
 import com.eric.repository.entity.ChatEntity;
-import com.eric.repository.entity.UserEntity;
+import com.eric.core.domain.entity.SysUser;
 import com.eric.service.UserService;
 import com.eric.utils.Util;
 import com.google.gson.Gson;
@@ -67,8 +66,8 @@ public class WebSocketServer {
         this.token = token;
         addOnlineCount();           //在线数加1
         try {
-            UserEntity userEntity = userService.queryByUserId(Long.parseLong(token));
-            logger.info("++++" + token + ",当前在线人数为:" + userEntity.userName);
+            SysUser sysUser = userService.queryByUserId(Long.parseLong(token));
+            logger.info("++++" + token + ",当前在线人数为:" + sysUser.userName);
 
             applicationContext.getBean(UserService.class);
         } catch (Exception e) {

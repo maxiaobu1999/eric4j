@@ -14,7 +14,7 @@
         framework框架核心
     </description>
     <dependencies>
-        <!-- 系统模块-->
+        <!-- 通用工具-->
         <dependency>
             <groupId>com.eric</groupId>
             <artifactId>eric-common</artifactId>
@@ -37,14 +37,36 @@
             <artifactId>druid-spring-boot-starter</artifactId>
         </dependency>
 
-
         <!-- 阿里JSON解析器 -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
         </dependency>
 
-<!--        &lt;!&ndash; 验证码 &ndash;&gt;-->
+        <!--redis 缓存数据库，常用于存储用户登录token、临时数据、定时相关数据等 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <!--redis 连接池配置 ‘lettuce:’ -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+        </dependency>
+
+
+
+
+
+<!-- ====================================== -->
+        <!--mybatis 起步依赖-->
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+        </dependency>
+
+
+        <!--        &lt;!&ndash; 验证码 &ndash;&gt;-->
 <!--        <dependency>-->
 <!--            <groupId>pro.fessional</groupId>-->
 <!--            <artifactId>kaptcha</artifactId>-->

@@ -20,16 +20,7 @@
             <artifactId>eric-framework</artifactId>
         </dependency>
 
-        <!-- 缓存数据库，常用于存储用户登录token、临时数据、定时相关数据等 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
-        <!--redis 连接池配置 ‘lettuce:’ -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-pool2</artifactId>
-        </dependency>
+
 
         <!-- MySQL连接驱动 -->
         <dependency>

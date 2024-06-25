@@ -1,8 +1,8 @@
-package com.eric.service.impl;
+package com.eric.system.service.impl;
 
-import com.eric.repository.IUserDao;
 import com.eric.core.domain.entity.SysUser;
-import com.eric.service.UserService;
+import com.eric.system.repository.ISysUserDao;
+import com.eric.system.service.ISysUserService;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
@@ -10,11 +10,17 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 用户 业务层处理
+ * 
+ * @author zhimin
+ */
 @Primary // 解决 expected single matching bean but found 2: accountServiceImpl,accountService
 @Service
-public class UserServiceImpl implements UserService {
+public class SysUserServiceImpl implements ISysUserService
+{
     @Resource
-    private IUserDao mAccountDao;
+    private ISysUserDao mAccountDao;
 
     @Override
     public int insertAccount(SysUser sysUser) {
@@ -85,5 +91,4 @@ public class UserServiceImpl implements UserService {
 //        }
 //        mAccountDao.updateByUserId(userEntity);
 //    }
-
 }

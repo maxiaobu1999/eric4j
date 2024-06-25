@@ -14,9 +14,9 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>eric</module>
-        <module>eric-framework</module>
         <module>eric-common</module>
+        <module>eric-framework</module>
+        <module>eric</module>
     </modules>
 
     <properties>
@@ -72,6 +72,24 @@
                 <version>${druid.version}</version>
             </dependency>
 
+            <!-- Shiro核心框架 -->
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-core</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
+            <!-- Shiro使用Spring框架 -->
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-spring</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
+            <!-- Shiro使用EhCache缓存框架 -->
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-ehcache</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
 
 <!--            &lt;!&ndash; Swagger3依赖 &ndash;&gt;-->
 <!--            <dependency>-->

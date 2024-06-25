@@ -1,9 +1,9 @@
-package com.eric.repository.entity;
+package com.eric.core.domain.entity;
 
 /** 账户信息 */
-public class UserEntity {
+public class SysUser {
     /** 用户ID */
-    public String userId;
+    public Long userId;
     /** 手机号码 */
     public Long phoneNum;
     /** 用户名 */
@@ -19,11 +19,28 @@ public class UserEntity {
     /** token */
     public String token;
 
-    public String getUserId() {
+
+
+    public boolean isAdmin()
+    {
+        return isAdmin(userId);
+    }
+    public static boolean isAdmin(Long userId)
+    {
+        return userId != null && 1L == userId;
+    }
+
+
+
+
+
+
+
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

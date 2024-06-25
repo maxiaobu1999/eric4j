@@ -1,4 +1,4 @@
-package com.eric.repository;
+package com.eric.system.repository;
 
 import com.eric.core.domain.entity.SysUser;
 import org.apache.ibatis.annotations.Delete;
@@ -14,7 +14,7 @@ import java.util.List;
  * 账户信息
  */
 @Repository
-public interface IUserDao {
+public interface ISysUserDao {
     /**
      * 增加一条
      *
