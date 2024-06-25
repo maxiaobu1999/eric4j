@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.eric</groupId>
+        <artifactId>Eric4j</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>eric-framework</artifactId>
+    <description>
+        framework框架核心
+    </description>
+    <dependencies>
+        <!-- 系统模块-->
+        <dependency>
+            <groupId>com.eric</groupId>
+            <artifactId>eric-common</artifactId>
+        </dependency>
+        <!-- SpringBoot Web容器 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- SpringBoot 拦截器 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
+        <!-- 阿里数据库连接池 -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+        </dependency>
+
+
+        <!-- 阿里JSON解析器 -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+        </dependency>
+
+<!--        &lt;!&ndash; 验证码 &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>pro.fessional</groupId>-->
+<!--            <artifactId>kaptcha</artifactId>-->
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    <artifactId>javax.servlet-api</artifactId>-->
+<!--                    <groupId>javax.servlet</groupId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
+<!--        </dependency>-->
+
+<!--        &lt;!&ndash; Shiro使用Spring框架 安全戒烟&ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.shiro</groupId>-->
+<!--            <artifactId>shiro-spring</artifactId>-->
+<!--        </dependency>-->
+
+<!--        &lt;!&ndash; thymeleaf模板引擎和shiro框架的整合 &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>com.github.theborakompanioni</groupId>-->
+<!--            <artifactId>thymeleaf-extras-shiro</artifactId>-->
+<!--        </dependency>-->
+
+<!--        &lt;!&ndash; 解析客户端操作系统、浏览器等 &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>eu.bitwalker</groupId>-->
+<!--            <artifactId>UserAgentUtils</artifactId>-->
+<!--        </dependency>-->
+
+<!--        &lt;!&ndash; 获取系统信息 &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>com.github.oshi</groupId>-->
+<!--            <artifactId>oshi-core</artifactId>-->
+<!--        </dependency>-->
+
+
+
+    </dependencies>
+
+
+</project>

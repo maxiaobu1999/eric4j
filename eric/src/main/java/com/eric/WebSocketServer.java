@@ -1,6 +1,9 @@
 package com.eric;
 
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
 import com.eric.model.BaseMsg;
 import com.eric.model.msg.ChatMessage;
 import com.eric.model.msg.ChatMsg;
@@ -12,8 +15,6 @@ import com.eric.utils.Util;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -113,7 +114,7 @@ public class WebSocketServer {
         logger.info("收到来自窗口" + token + "的信息:" + message);
 
         try {
-            JSONObject object = new JSONObject(message);
+            JSONObject object = JSONObject.parseObject(message);
             String type = object.getString("type");
             if (type.equals("chat")) {
                 ChatMessage chatMessage = mGson.fromJson(object.getString("data"), ChatMessage.class);
