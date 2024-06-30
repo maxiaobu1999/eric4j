@@ -1,24 +1,27 @@
 package com.eric.controller;
 
 
-import com.eric.common.BaseResponse;
-import com.eric.common.TokenManager;
+import com.eric.BaseResponse;
+import com.eric.constant.Constant;
+import com.eric.jwt.JwtUtils;
+import com.eric.redis.TokenManager;
 import com.eric.core.domain.entity.SysUser;
 import com.eric.service.SmsCodeService;
 import com.eric.service.UserService;
+import com.eric.utils.PasswordUtils;
+import com.eric.utils.StringUtils;
 import com.eric.utils.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import java.util.ArrayList;
 import java.util.Map;
 
 import static org.apache.logging.log4j.util.Strings.isEmpty;
-
 @RestController // 相当于@ResponseBody和@Controller
 @RequestMapping(value = "/user")// 配置url映射,一级
 @CrossOrigin(origins = "*")// 解决浏览器跨域问题(局部)
@@ -34,24 +37,55 @@ public class UserController extends BaseController {
     private UserService mUserService;
     @Resource
     private TokenManager mTokenManager;
+
+
     /**
-     * 获取验证码
-     * http://localhost:8089/user/smsCode?phoneNum=15652814311
+     * 账户登录
+     * http://localhost:8089/user/login/username?username=1514311&password=1234
      *
-     * @param phoneNum 手机号码
+     * @param username 用户名
+     * @param password 密码
+     * @return token
      */
-//    @SkipTokenValidate
-    @RequestMapping(value = {"/smsCode"}, method = {RequestMethod.GET})// 配置url映射,二级
-    public BaseResponse<String> smsCode(@RequestParam String phoneNum) {
-        BaseResponse<String> responseEntity;
-        if (!Util.isPhone(phoneNum)) {
-            responseEntity = new BaseResponse<>(-1, "手机号码填写错误");
-            return responseEntity;
+    @SuppressWarnings("Duplicates")
+    @RequestMapping(value = {"/login/username"}, method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
+    public BaseResponse<SysUser> loginByUsername(String username, String password, @RequestHeader Map<String, String> headers) {
+        int size = headers.size();
+        BaseResponse<SysUser> responseEntity;
+        try {
+            logger.info("loginByUsername" + ",username:" + username);
+            if (StringUtils.isEmpty(username)) {
+                responseEntity = new BaseResponse<>(1, "用户名是null的");
+                return responseEntity;
+            }
+            if (StringUtils.isEmpty(password)) {
+                responseEntity = new BaseResponse<>(1, "密码是null的");
+                return responseEntity;
+            }
+            SysUser sysUser = mUserService.findByUserName(username);
+            if (sysUser == null) {
+                responseEntity = new BaseResponse<>(1, "用户名不存在或密码错误（用户名）");
+                return responseEntity;
+            }
+
+            if (!PasswordUtils.matches(sysUser.getSalt(), password, sysUser.getPassword())) {
+                responseEntity = new BaseResponse<>(1, "用户名不存在或密码错误（密码）");
+                return responseEntity;
+            }
+
+            // 查userId
+            String userId = sysUser.getUserId().toString();
+            // 更新的token
+            String token = mTokenManager.generateToken(Long.parseLong(userId));
+            // 生成 accessToken
+            String accessToken = JwtUtils.accessSign(username, Long.valueOf(userId));
+
+            responseEntity = new BaseResponse<>(0, "登录成功", accessToken);
+            responseEntity.setData(sysUser);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseEntity = new BaseResponse<>(-1, "登录失败，为啥不知道");
         }
-        int smsCode = mSmsCodeService.getSmsCode(phoneNum);
-        responseEntity = new BaseResponse<>(0,
-                "短信收收费,验证码填：1234");
-        responseEntity.setData(String.valueOf(smsCode));
         return responseEntity;
     }
 
@@ -87,9 +121,12 @@ public class UserController extends BaseController {
             SysUser sysUser = new SysUser();
             sysUser.setUserName(username);
             sysUser.setNickName(username);
-            sysUser.setPassword(password);
+            sysUser.setSalt(PasswordUtils.getSalt());
+            sysUser.setPassword(PasswordUtils.encode(password, sysUser.getSalt()));
+
             sysUser.userId = Util.createUserID();
-            mUserService.insertAccount(sysUser);
+            int res = mUserService.insertAccount(sysUser);
+            logger.info("registerByUsername=="+res);
 
             // 返回数据
             responseEntity = new BaseResponse<>(0, "注册成功", String.valueOf(sysUser.userId));
@@ -100,6 +137,83 @@ public class UserController extends BaseController {
         }
         return responseEntity;
     }
+
+    /**
+     * 查询用户信息
+     * <p>
+     * http://localhost:8088/user/info?token=308328080
+     *
+     * @return 用户信息
+     */
+
+    @RequestMapping(value = {"/info"}, method = {RequestMethod.GET})
+    public BaseResponse<SysUser> account(HttpServletRequest request) {
+        BaseResponse<SysUser> responseEntity;
+        try {
+            String token = request.getHeader(Constant.ACCESS_TOKEN);
+            logger.info("QueryUser#{\"url\":{}, \"method\":{}, \"token\":{}}", "/account/queryUser", RequestMethod.GET, token);
+            // 查询用户信息
+            Long userId = JwtUtils.getUserId(token);
+
+            SysUser accountEntity = mUserService.findByUserId(userId);
+            responseEntity = new BaseResponse<>(0, "获取用户信息成功");
+            responseEntity.setData(accountEntity);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseEntity = new BaseResponse<>(-1, "获取用户信息，为啥不知道");
+        }
+        return responseEntity;
+    }
+
+
+//    /**
+//     * 修改用户信息
+//     * <p>
+//     * <p>
+//     * http://localhost:8088/account/updateUserInfo?token=1490600326&accountNew="{ \"userId\": \"\", \"phoneNum\": 0, \"userName\": \"1514311\", \"password\": \"123\", \"email\": null, \"avatar\": null, \"gender\": null, \"identifier\": null }"
+//     *
+//     * @param accountNew 用户信息的json
+//     */
+//    @RequestMapping(value = {"/updateUserInfo"}, method = {RequestMethod.POST}, produces = {MediaType.APPLICATION_JSON_VALUE})
+//    public BaseResponse<String> updateUserInfo(@RequestBody UserEntity accountNew, @RequestParam int userId) {
+//        BaseResponse<String> responseEntity;
+//        try {
+//            // 修改用户信息，但是userId不能变
+//            accountNew.setUserId(userId);
+//            mAccountService.updateAccountByUserId(accountNew);
+//            responseEntity = new BaseResponse<>(0, "修改用户信息成功");
+//            responseEntity.setData("");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            responseEntity = new BaseResponse<>(-1, "修改用户信息失败，为啥不知道");
+//        }
+//        return responseEntity;
+//    }
+
+    /**
+     * 获取验证码
+     * http://localhost:8089/user/smsCode?phoneNum=15652814311
+     *
+     * @param phoneNum 手机号码
+     */
+//    @SkipTokenValidate
+    @RequestMapping(value = {"/smsCode"}, method = {RequestMethod.GET})// 配置url映射,二级
+    public BaseResponse<String> smsCode(@RequestParam String phoneNum) {
+        BaseResponse<String> responseEntity;
+        if (!Util.isPhone(phoneNum)) {
+            responseEntity = new BaseResponse<>(-1, "手机号码填写错误");
+            return responseEntity;
+        }
+        int smsCode = mSmsCodeService.getSmsCode(phoneNum);
+        responseEntity = new BaseResponse<>(0,
+                "短信收收费,验证码填：1234");
+        responseEntity.setData(String.valueOf(smsCode));
+        return responseEntity;
+    }
+
+
+
+
     /**
      * 注销
      * http://localhost:8089/user/delete/userid?id=509434321728311296
@@ -127,52 +241,7 @@ public class UserController extends BaseController {
     }
 
 
-    /**
-     * 账户登录
-     * http://localhost:8089/user/login/username?username=1514311&password=1234
-     *
-     * @param username 用户名
-     * @param password 密码
-     * @return token
-     */
-    @SuppressWarnings("Duplicates")
-    @RequestMapping(value = {"/login/username"}, method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
-    public BaseResponse<SysUser> loginByUsername(String username, String password, @RequestHeader Map<String, String> headers) {
 
-        int size = headers.size();
-        BaseResponse<SysUser> responseEntity;
-        try {
-            logger.info("loginByUsername" + ",username:" + username);
-            if (StringUtils.isEmpty(username)) {
-                responseEntity = new BaseResponse<>(1, "用户名是null的");
-                return responseEntity;
-            }
-            if (StringUtils.isEmpty(password)) {
-                responseEntity = new BaseResponse<>(1, "密码是null的");
-                return responseEntity;
-            }
-            SysUser sysUser = mUserService.findByUserName(username);
-            if (sysUser == null) {
-                responseEntity = new BaseResponse<>(1, "用户名不存在或密码错误（用户名）");
-                return responseEntity;
-            }
-            if (!password.equals(sysUser.getPassword())) {
-                responseEntity = new BaseResponse<>(1, "用户名不存在或密码错误（密码）");
-                return responseEntity;
-            }
-            // 查userId
-            String userId = sysUser.getUserId().toString();
-            // 更新的token
-            String token = mTokenManager.generateToken(Long.parseLong(userId));
-
-            responseEntity = new BaseResponse<>(0, "登录成功", token);
-            responseEntity.setData(sysUser);
-        } catch (Exception e) {
-            e.printStackTrace();
-            responseEntity = new BaseResponse<>(-1, "登录失败，为啥不知道");
-        }
-        return responseEntity;
-    }
 
     /**
      * 修改密码
@@ -340,7 +409,7 @@ public class UserController extends BaseController {
      * 修改密码
      * http://localhost:8089/user/modify/avatar?userId=509797888029757440&avatar=https://tse2-mm.cn.bing.net/th/id/OIP-C.dWr0cmLRjSSgKUMmphwTtAHaEc?rs=1&pid=ImgDetMain
      *
-     * @param userId    用户id
+     * @param userId 用户id
      * @param avatar 头像
      * @return token
      */
@@ -364,7 +433,7 @@ public class UserController extends BaseController {
                 return responseEntity;
             }
 
-            SysUser sysUser = mUserService.queryByUserId(id);
+            SysUser sysUser = mUserService.findByUserId(id);
             if (sysUser == null) {
                 responseEntity = new BaseResponse<>(1, "userId不存在");
                 return responseEntity;
@@ -381,57 +450,7 @@ public class UserController extends BaseController {
         return responseEntity;
     }
 
-//    /**
-//     * 修改用户信息
-//     * <p>
-//     * http://localhost:8088/account/account?token=308328080
-//     *
-//     * @return 用户信息
-//     */
-//    @ApiOperation(value = "查询用户信息", notes = "查询用户信息，token")
-//    @ApiImplicitParams({
-//            @ApiImplicitParam(name = "userId", value = "用户ID", required = true, paramType = "query", dataType = "String", defaultValue = "1"),
-//            @ApiImplicitParam(name = "token", value = "token", required = true, paramType = "query", dataType = "String", defaultValue = "308328080"),
-//    })
-//    @RequestMapping(value = {"/account"}, method = {RequestMethod.GET}, produces = {MediaType.APPLICATION_JSON_VALUE})
-//    public BaseResponse<AccountEntity> account(@RequestParam String token, @RequestParam int userId) {
-//        logger.info("QueryUser#{\"url\":{}, \"method\":{}, \"token\":{}}", "/account/queryUser", RequestMethod.GET, token);
-//        BaseResponse<AccountEntity> responseEntity;
-//        try {
-//            // 查询用户信息
-//            AccountEntity accountEntity = mAccountService.findAccountByUserId(userId);
-//            responseEntity = new BaseResponse<>(0, "获取用户信息成功");
-//            responseEntity.setData(accountEntity);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            responseEntity = new BaseResponse<>(-1, "获取用户信息，为啥不知道");
-//        }
-//        return responseEntity;
-//    }
-//
-//    /**
-//     * 修改用户信息
-//     * <p>
-//     * <p>
-//     * http://localhost:8088/account/updateUserInfo?token=1490600326&accountNew="{ \"userId\": \"\", \"phoneNum\": 0, \"userName\": \"1514311\", \"password\": \"123\", \"email\": null, \"avatar\": null, \"gender\": null, \"identifier\": null }"
-//     *
-//     * @param accountNew 用户信息的json
-//     */
-//    @RequestMapping(value = {"/updateUserInfo"}, method = {RequestMethod.POST}, produces = {MediaType.APPLICATION_JSON_VALUE})
-//    public BaseResponse<String> updateUserInfo(@RequestBody UserEntity accountNew, @RequestParam int userId) {
-//        BaseResponse<String> responseEntity;
-//        try {
-//            // 修改用户信息，但是userId不能变
-//            accountNew.setUserId(userId);
-//            mAccountService.updateAccountByUserId(accountNew);
-//            responseEntity = new BaseResponse<>(0, "修改用户信息成功");
-//            responseEntity.setData("");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            responseEntity = new BaseResponse<>(-1, "修改用户信息失败，为啥不知道");
-//        }
-//        return responseEntity;
-//    }
+
 
 
 

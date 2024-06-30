@@ -21,8 +21,8 @@ public interface IUserDao {
      * @param item 用户信息
      */
 //    @Insert("INSERT INTO user(userId,phoneNum,userName,password," + "avatar," + "nickname)" +
-    @Insert("INSERT INTO user(userId,phoneNum,userName,password,avatar,nickName,token)" +
-            "values(#{userId},#{phoneNum},#{userName},#{password}" + ",#{avatar}" + ",#{nickName},#{token})")
+    @Insert("INSERT INTO user(userId,phoneNum,userName,password,avatar,nickName,token,salt)" +
+            "values(#{userId},#{phoneNum},#{userName},#{password}" + ",#{avatar}" + ",#{nickName},#{token},#{salt})")
     int insertItem(SysUser item);
 
     @Select("SELECT * FROM user ")

@@ -1,7 +1,7 @@
 package com.eric.controller;
 
 
-import com.eric.common.BaseResponse;
+import com.eric.BaseResponse;
 import com.eric.repository.entity.ChatEntity;
 import com.eric.service.ChatService;
 import com.eric.service.SmsCodeService;

@@ -14,12 +14,13 @@
     </description>
     <packaging>jar</packaging>
     <dependencies>
+
+
         <!-- 核心模块-->
         <dependency>
             <groupId>com.eric</groupId>
             <artifactId>eric-framework</artifactId>
         </dependency>
-
 
 
         <!-- MySQL连接驱动 -->
@@ -46,6 +47,12 @@
             <version>1.6.2</version>
         </dependency>
 
+        <!-- token 创建加密 -->
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+        </dependency>
+
         <!-- =========================================================== -->
         <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
         <dependency>
@@ -59,25 +66,11 @@
             <artifactId>mybatis-spring-boot-starter</artifactId>
         </dependency>
 
-
-        <!--        &lt;!&ndash;web功能的起步依赖 含spring springMVC&ndash;&gt;-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.boot</groupId>-->
-        <!--            <artifactId>spring-boot-starter-web</artifactId>-->
-        <!--        </dependency>-->
-
-        <!--        &lt;!&ndash;热部署配置&ndash;&gt;-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.boot</groupId>-->
-        <!--            <artifactId>spring-boot-devtools</artifactId>-->
-        <!--        </dependency>-->
-
-        <!--        &lt;!&ndash;@ConfiguaritionProperties的执行器的配置，不配报警告，写yml可以有提示&ndash;&gt;-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.boot</groupId>-->
-        <!--            <artifactId>spring-boot-configuration-processor</artifactId>-->
-        <!--            <optional>true</optional>-->
-        <!--        </dependency>-->
+        <!-- io常用工具类 -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
 
         <!-- 参数验证AOP处理 -->
         <dependency>
@@ -90,146 +83,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.5.15</version>
-                <configuration>
-                    <fork>true</fork> <!-- 如果没有该配置，devtools不会生效 -->
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>3.0.0</version>
-                <configuration>
-                    <failOnMissingWebXml>false</failOnMissingWebXml>
-                    <warName>${project.artifactId}</warName>
-                </configuration>
             </plugin>
         </plugins>
-        <finalName>${project.artifactId}</finalName>
     </build>
 
 </project>
 
-
-        <!--        &lt;!&ndash;web功能的起步依赖 含spring springMVC&ndash;&gt;-->
-        <!--<dependency>-->
-        <!--<groupId>org.springframework.boot</groupId>-->
-        <!--<artifactId>spring-boot-starter-web</artifactId>-->
-        <!--</dependency>-->
-
-        <!--        &lt;!&ndash;热部署配置&ndash;&gt;-->
-        <!--<dependency>-->
-        <!--<groupId>org.springframework.boot</groupId>-->
-        <!--<artifactId>spring-boot-devtools</artifactId>-->
-        <!--</dependency>-->
-        <!--        &lt;!&ndash; 参数验证AOP处理 &ndash;&gt;-->
-        <!--<dependency>-->
-        <!--<groupId>org.springframework.boot</groupId>-->
-        <!--<artifactId>spring-boot-starter-aop</artifactId>-->
-        <!--</dependency>-->
-
-        <!--        &lt;!&ndash;@ConfiguaritionProperties的执行器的配置，不配报警告，写yml可以有提示&ndash;&gt;-->
-        <!--<dependency>-->
-        <!--<groupId>org.springframework.boot</groupId>-->
-        <!--<artifactId>spring-boot-configuration-processor</artifactId>-->
-        <!--<optional>true</optional>-->
-        <!--</dependency>-->
-
-        <!--        &lt;!&ndash;mybatis起步依赖&ndash;&gt;-->
-        <!--<dependency>-->
-        <!--<groupId>org.mybatis.spring.boot</groupId>-->
-        <!--<artifactId>mybatis-spring-boot-starter</artifactId>-->
-        <!--<version>2.0.0</version>-->
-        <!--</dependency>-->
-
-        <!--        &lt;!&ndash; MySQL连接驱动 &ndash;&gt;-->
-        <!--<dependency>-->
-        <!--<groupId>mysql</groupId>-->
-        <!--<artifactId>mysql-connector-java</artifactId>-->
-        <!--</dependency>-->
-
-
-        <!--                &lt;!&ndash; 缓存数据库，常用于存储用户登录token、临时数据、定时相关数据等 &ndash;&gt;-->
-        <!--        <dependency>-->
-        <!--        <groupId>org.springframework.boot</groupId>-->
-        <!--        <artifactId>spring-boot-starter-data-redis</artifactId>-->
-        <!--        </dependency>-->
-
-        <!--<dependency>-->
-        <!--<groupId>org.springframework.boot</groupId>-->
-        <!--<artifactId>spring-boot-starter-websocket</artifactId>-->
-        <!--</dependency>-->
-
-        <!--        &lt;!&ndash; https://mvnrepository.com/artifact/com.google.code.gson/gson &ndash;&gt;-->
-        <!--<dependency>-->
-        <!--<groupId>com.google.code.gson</groupId>-->
-        <!--<artifactId>gson</artifactId>-->
-        <!--<version>2.8.5</version>-->
-        <!--</dependency>-->
-
-        <!--        &lt;!&ndash;okhttp3&ndash;&gt;-->
-        <!--<dependency>-->
-        <!--<groupId>com.squareup.okhttp3</groupId>-->
-        <!--<artifactId>okhttp</artifactId>-->
-        <!--<version>3.11.0</version>-->
-        <!--</dependency>-->
-
-        <!--        &lt;!&ndash; 单元测试 &ndash;&gt;-->
-        <!--<dependency>-->
-        <!--<groupId>junit</groupId>-->
-        <!--<artifactId>junit</artifactId>-->
-        <!--<version>4.12</version>-->
-        <!--<scope>test</scope>-->
-        <!--</dependency>-->
-
-        <!--        &lt;!&ndash; Springfox：书写API文档 BEGIN&ndash;&gt;-->
-        <!--<dependency>-->
-        <!--<groupId>io.springfox</groupId>-->
-        <!--<artifactId>springfox-swagger2</artifactId>-->
-        <!--<version>2.9.2</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-        <!--<groupId>io.springfox</groupId>-->
-        <!--<artifactId>springfox-swagger-ui</artifactId>-->
-        <!--<version>2.9.2</version>-->
-        <!--</dependency>-->
-        <!--        &lt;!&ndash; Springfox：书写API文档 END&ndash;&gt;-->
-
-        <!--        &lt;!&ndash;  SpringBoot Boot Redis &ndash;&gt;-->
-        <!--        &lt;!&ndash; 缓存数据库，常用于存储用户登录token、临时数据、定时相关数据等 &ndash;&gt;-->
-        <!--<dependency>-->
-        <!--<groupId>org.springframework.boot</groupId>-->
-        <!--<artifactId>spring-boot-starter-data-redis</artifactId>-->
-        <!--</dependency>-->
-        <!--        &lt;!&ndash;redis 连接池配置 ‘lettuce:’ &ndash;&gt;-->
-        <!--<dependency>-->
-        <!--<groupId>org.apache.commons</groupId>-->
-        <!--<artifactId>commons-pool2</artifactId>-->
-        <!--</dependency>-->
-
-        <!--        &lt;!&ndash;Shiro核心框架 &ndash;&gt;-->
-        <!--<dependency>-->
-        <!--<groupId>org.apache.shiro</groupId>-->
-        <!--<artifactId>shiro-core</artifactId>-->
-        <!--<version>1.12.0</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-        <!--<groupId>org.apache.shiro</groupId>-->
-        <!--<artifactId>shiro-spring</artifactId>-->
-        <!--<version>1.12.0</version>-->
-        <!--</dependency>-->
-        <!--        &lt;!&ndash; Shiro使用EhCache缓存框架 &ndash;&gt;-->
-        <!--<dependency>-->
-        <!--<groupId>org.apache.shiro</groupId>-->
-        <!--<artifactId>shiro-ehcache</artifactId>-->
-        <!--<version>1.12.0</version>-->
-        <!--</dependency>-->
-
-        <!--        </dependencies>-->

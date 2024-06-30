@@ -1,6 +1,6 @@
-package com.eric.config.redis;
+package com.eric.redis;
 
-import com.eric.properties.CacheConfigProperties;
+//import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +14,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import javax.annotation.Resource;
 import java.time.Duration;
 
-
+//@Slf4j
 @Configuration
 @EnableCaching
 public class CacheManagerConfig {
@@ -33,7 +33,7 @@ public class CacheManagerConfig {
         //初始化RedisCacheManager
         RedisCacheManager cacheManager = new RedisCacheManager(redisCacheWriter, defaultCacheConfig);
 
-
+//log.info("++++++++++++++++++++++++++++++++123");
 
         return cacheManager;
     }

@@ -66,7 +66,7 @@ public class WebSocketServer {
         this.token = token;
         addOnlineCount();           //在线数加1
         try {
-            SysUser sysUser = userService.queryByUserId(Long.parseLong(token));
+            SysUser sysUser = userService.findByUserId(Long.parseLong(token));
             logger.info("++++" + token + ",当前在线人数为:" + sysUser.userName);
 
             applicationContext.getBean(UserService.class);

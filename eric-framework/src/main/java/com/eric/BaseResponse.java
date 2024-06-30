@@ -1,4 +1,4 @@
-package com.eric.common;
+package com.eric;
 
 //import io.swagger.annotations.ApiModel;
 //import io.swagger.annotations.ApiModelProperty;

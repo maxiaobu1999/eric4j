@@ -1,4 +1,4 @@
-package com.eric.common;
+package com.eric.redis;
 
 import com.eric.utils.DigestUtil;
 import org.slf4j.Logger;

@@ -1,4 +1,4 @@
-package com.eric.properties;
+package com.eric.redis;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

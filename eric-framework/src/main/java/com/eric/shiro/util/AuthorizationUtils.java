@@ -1,6 +1,6 @@
 package com.eric.shiro.util;
 
-import com.eric.shiro.realm.UserRealm;
+import com.eric.shiro.realm.ShiroRealm;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.mgt.RealmSecurityManager;
 
@@ -22,9 +22,9 @@ public class AuthorizationUtils
     /**
      * 获取自定义Realm
      */
-    public static UserRealm getUserRealm()
+    public static ShiroRealm getUserRealm()
     {
         RealmSecurityManager rsm = (RealmSecurityManager) SecurityUtils.getSecurityManager();
-        return (UserRealm) rsm.getRealms().iterator().next();
+        return (ShiroRealm) rsm.getRealms().iterator().next();
     }
 }

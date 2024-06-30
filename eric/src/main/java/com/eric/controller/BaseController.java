@@ -1,7 +1,7 @@
 package com.eric.controller;
 
-import com.eric.common.BaseResponse;
-import com.eric.common.exception.BusinessException;
+import com.eric.BaseResponse;
+import com.eric.exception.BusinessException1;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -21,7 +21,7 @@ public class BaseController {
     public BaseResponse exceptionHandler(Exception e) {
         logger.info("Exception", e);
         BaseResponse response = new BaseResponse();
-        if(e instanceof BusinessException) {
+        if(e instanceof BusinessException1) {
             response.setCode(-3);
             response.setMsg(e.getMessage());
         } else {

@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public SysUser queryByUserId(Long userId) {
+    public SysUser findByUserId(Long userId) {
         List<SysUser> accounts = mAccountDao.queryByUserId(userId);
         if (accounts != null && !accounts.isEmpty()) {
             return accounts.get(0);
@@ -49,12 +49,6 @@ public class UserServiceImpl implements UserService {
     public void updateByUserId(SysUser sysUser) {
         mAccountDao.updateByUserId(sysUser);
     }
-
-    @Override
-    public void deleteByUserId(Long userId) {
-        mAccountDao.deleteByUserId(userId);
-    }
-
     @Override
     public SysUser findAccountByPhoneNum(String phoneNum) {
         List<SysUser> accounts = mAccountDao.findByphoneNum(phoneNum);
@@ -63,6 +57,11 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
+    @Override
+    public void deleteByUserId(Long userId) {
+        mAccountDao.deleteByUserId(userId);
+    }
+
 
 //    @Override
 //    public void updateAccountByUserId(AccountInfo accountInfo) {

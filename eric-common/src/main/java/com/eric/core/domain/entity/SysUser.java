@@ -1,6 +1,9 @@
 package com.eric.core.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /** 账户信息 */
+//@Data
 public class SysUser {
     /** 用户ID */
     public Long userId;
@@ -19,6 +22,19 @@ public class SysUser {
     /** token */
     public String token;
 
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
+    /**
+     * 盐值
+     */
+    @JsonIgnore
+    private String salt;
 
 
     public boolean isAdmin()

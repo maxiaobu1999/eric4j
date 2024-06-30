@@ -18,7 +18,7 @@ public interface UserService {
     /**
      * 查找账户，userId
      */
-    SysUser queryByUserId(Long userId);
+    SysUser findByUserId(Long userId);
 
     /**
      * 查找账户，userName
@@ -35,6 +35,10 @@ public interface UserService {
      * 更新账户，基于userId
      */
     void updateByUserId(SysUser sysUser);
+
+    /**
+     * 查询用户信息，基于userId
+     */
 
     /**
      * 删除账户，基于userId
