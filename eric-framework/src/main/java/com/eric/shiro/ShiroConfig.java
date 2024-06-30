@@ -176,7 +176,8 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/user/register/username", "anon");
         filterChainDefinitionMap.put("/user/login/v2/username", "anon");
         filterChainDefinitionMap.put("/user/login/v2/username", "anon");
-        filterChainDefinitionMap.put("/prod/**", "anon");
+        filterChainDefinitionMap.put("/prod/info", "anon");
+        filterChainDefinitionMap.put("/prod/page", "anon");
 
 
         //自定义拦截器限制并发人数,参考博客：

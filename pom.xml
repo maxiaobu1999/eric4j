@@ -38,13 +38,11 @@
         <poi.version>4.1.2</poi.version>
         <velocity.version>2.3</velocity.version>
         <jackson.version>2.16.0</jackson.version>
+        <mybatis-plus.version>3.5.5</mybatis-plus.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
-
-
-
             <!-- SpringBoot的依赖配置-->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -145,7 +143,7 @@
 
 
 
-            <!-- =========================================================== -->
+            <!-- ============================== Mine ============================= -->
             <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
             <dependency>
                 <groupId>com.google.code.gson</groupId>
@@ -159,12 +157,18 @@
                 <version>5.8.26</version>
             </dependency>
 
-
             <!--mybatis起步依赖-->
             <dependency>
                 <groupId>org.mybatis.spring.boot</groupId>
                 <artifactId>mybatis-spring-boot-starter</artifactId>
                 <version>2.0.0</version>
+            </dependency>
+
+            <!-- pagehelper 分页插件 -->
+            <dependency>
+                <groupId>com.github.pagehelper</groupId>
+                <artifactId>pagehelper-spring-boot-starter</artifactId>
+                <version>${pagehelper.boot.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

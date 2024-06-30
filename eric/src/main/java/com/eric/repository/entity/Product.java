@@ -10,16 +10,13 @@
 
 package com.eric.repository.entity;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 /**
  * @author lanhai
  */
-public class Product implements Serializable {
+public class Product {
 
     private static final long serialVersionUID = -4644407386444894349L;
     /**
@@ -118,18 +115,7 @@ public class Product implements Serializable {
      */
     private Integer version;
 
-//    /**
-//     * sku列表
-//     */
-//    private List<Sku> skuList;
-
-    /**
-     * 店铺名称
-     */
-    private String shopName;
-
     private List<Long> tagList;
-
 
     public static class DeliveryModeVO {
 
@@ -143,5 +129,183 @@ public class Product implements Serializable {
          */
         private Boolean hasShopDelivery;
 
+    }
+
+//    /**
+//     * sku列表
+//     */
+//    private List<Sku> skuList;
+
+    /**
+     * 店铺名称
+     */
+    private String shopName;
+
+    public List<Long> getTagList() {
+        return tagList;
+    }
+
+    public void setTagList(List<Long> tagList) {
+        this.tagList = tagList;
+    }
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+    public Date getPutawayTime() {
+        return putawayTime;
+    }
+
+    public void setPutawayTime(Date putawayTime) {
+        this.putawayTime = putawayTime;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Long getDeliveryTemplateId() {
+        return deliveryTemplateId;
+    }
+
+    public void setDeliveryTemplateId(Long deliveryTemplateId) {
+        this.deliveryTemplateId = deliveryTemplateId;
+    }
+
+    public String getDeliveryMode() {
+        return deliveryMode;
+    }
+
+    public void setDeliveryMode(String deliveryMode) {
+        this.deliveryMode = deliveryMode;
+    }
+
+    public Integer getTotalStocks() {
+        return totalStocks;
+    }
+
+    public void setTotalStocks(Integer totalStocks) {
+        this.totalStocks = totalStocks;
+    }
+
+    public Integer getSoldNum() {
+        return soldNum;
+    }
+
+    public void setSoldNum(Integer soldNum) {
+        this.soldNum = soldNum;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getImgs() {
+        return imgs;
+    }
+
+    public void setImgs(String imgs) {
+        this.imgs = imgs;
+    }
+
+    public String getPic() {
+        return pic;
+    }
+
+    public void setPic(String pic) {
+        this.pic = pic;
+    }
+
+    public String getBrief() {
+        return brief;
+    }
+
+    public void setBrief(String brief) {
+        this.brief = brief;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public Double getOriPrice() {
+        return oriPrice;
+    }
+
+    public void setOriPrice(Double oriPrice) {
+        this.oriPrice = oriPrice;
+    }
+
+    public String getProdName() {
+        return prodName;
+    }
+
+    public void setProdName(String prodName) {
+        this.prodName = prodName;
+    }
+
+    public Long getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(Long shopId) {
+        this.shopId = shopId;
+    }
+
+    public Long getProdId() {
+        return prodId;
+    }
+
+    public void setProdId(Long prodId) {
+        this.prodId = prodId;
     }
 }

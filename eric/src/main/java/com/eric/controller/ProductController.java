@@ -1,23 +1,17 @@
 package com.eric.controller;
 
 
+import com.eric.BaseResponse;
+import com.eric.repository.entity.Product;
+import com.eric.service.ProductService;
 import com.eric.service.SmsCodeService;
-import com.eric.service.UserService;
-import com.eric.utils.PasswordUtils;
-import com.eric.utils.StringUtils;
-import com.eric.utils.Util;
+import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-
-import static org.apache.logging.log4j.util.Strings.isEmpty;
 
 @RestController // 相当于@ResponseBody和@Controller
 @RequestMapping(value = "/prod")// 配置url映射,一级
@@ -31,26 +25,45 @@ public class ProductController extends BaseController {
     @Resource
     private SmsCodeService mSmsCodeService;
     @Resource
-    private UserService mUserService;
+    private ProductService mService;
 
-//    /**
-//     * 获取信息
-//     */
-//    @GetMapping("/info/{prodId}")
-//    public ServerResponseEntity<Product> info(@PathVariable("prodId") Long prodId) {
-//        Product prod = productService.getProductByProdId(prodId);
-//        if (!Objects.equals(prod.getShopId(), SecurityUtils.getSysUser().getShopId())) {
-//            throw new YamiShopBindException("没有权限获取该商品规格信息");
-//        }
-//        List<Sku> skuList = skuService.listByProdId(prodId);
-//        prod.setSkuList(skuList);
-//
-//        //获取分组标签
-//        List<Long> listTagId = prodTagReferenceService.listTagIdByProdId(prodId);
-//        prod.setTagList(listTagId);
-//        return ServerResponseEntity.success(prod);
-//    }
+    /**
+     * 获取信息
+     */
+    @RequestMapping(value = {"/info"}, method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
+    public BaseResponse<Product> info(Long prodId) {
+
+        BaseResponse<Product> responseEntity;
+        try {
+            logger.info("info" + ",prodId:" + prodId);
+            Product prod = mService.getItem(prodId);
+            responseEntity = new BaseResponse<>(0, "成功");
+            responseEntity.setData(prod);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseEntity = new BaseResponse<>(-1, "error : "+e.getMessage());
+        }
+        return responseEntity;
+    }
 
 
+    /**
+     * 获取信息
+     */
+    @RequestMapping(value = {"/page"}, method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
+    public BaseResponse<List<Product>> selectAll(int pageNum,int pageSize) {
 
+        BaseResponse<List<Product>> responseEntity;
+        try {
+            logger.info("page" + ",pageNum:" + pageNum);
+            PageHelper.startPage(pageNum,pageSize);
+            List<Product> list = mService.SelectAll();
+            responseEntity = new BaseResponse<>(0, "成功");
+            responseEntity.setData(list);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseEntity = new BaseResponse<>(-1, "error : "+e.getMessage());
+        }
+        return responseEntity;
+    }
 }
