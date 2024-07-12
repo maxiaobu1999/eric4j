@@ -2,7 +2,7 @@ package com.eric.shiro.web.filter.kickout;
 
 import com.eric.constant.ShiroConstants;
 import com.eric.core.domain.AjaxResult;
-import com.eric.core.domain.entity.SysUser;
+import com.eric.core.domain.entity.UserEntity;
 import com.eric.utils.ServletUtils;
 import com.eric.utils.ShiroUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,7 +26,7 @@ import java.util.Deque;
 
 /**
  * 登录帐号控制过滤器
- * 
+ *
  * @author zhimin
  */
 public class KickoutSessionFilter extends AccessControlFilter
@@ -71,7 +71,7 @@ public class KickoutSessionFilter extends AccessControlFilter
         {
             Session session = subject.getSession();
             // 当前登录用户
-            SysUser user = ShiroUtils.getSysUser();
+            UserEntity user = ShiroUtils.getSysUser();
             String loginName = user.getUserName();
             Serializable sessionId = session.getId();
 

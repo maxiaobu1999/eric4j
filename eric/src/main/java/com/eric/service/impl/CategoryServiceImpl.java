@@ -1,22 +1,25 @@
 package com.eric.service.impl;
 
+import com.eric.repository.ICategoryDao;
 import com.eric.repository.IProductDao;
+import com.eric.repository.entity.CategoryEntity;
 import com.eric.repository.entity.Product;
+import com.eric.service.CategoryService;
 import com.eric.service.ProductService;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
+
 @Primary // 解决 expected single matching bean but found 2: accountServiceImpl,accountService
 @Service
-public class ProductServiceImpl implements ProductService {
+public class CategoryServiceImpl implements CategoryService {
     @Resource
-    private IProductDao mProductDao;
+    private ICategoryDao mCategoryDao;
     @Override
-    public Product getItem(Long prodId) {
-        List<Product> list = mProductDao.selectItem(prodId);
+    public CategoryEntity getItem(Long prodId) {
+        List<CategoryEntity> list = mCategoryDao.selectItem(prodId);
         if (list != null && !list.isEmpty()) {
             return list.get(0);
         }
@@ -24,8 +27,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> SelectAll() {
-        List<Product> list = mProductDao.selectAll();
+    public List<CategoryEntity> SelectAll() {
+        List<CategoryEntity> list = mCategoryDao.selectAll();
         return list;
     }
 
@@ -33,8 +36,8 @@ public class ProductServiceImpl implements ProductService {
      * 新品推荐
      */
     @Override
-    public List<Product> selectRange(int start, int end) {
-        List<Product> list = mProductDao.selectRange(start, end);
+    public List<CategoryEntity> selectRange(int start, int end) {
+        List<CategoryEntity> list = mCategoryDao.selectRange(start, end);
 
         return list;
     }

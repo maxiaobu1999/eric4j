@@ -1,6 +1,6 @@
 package com.eric.system.repository;
 
-import com.eric.core.domain.entity.SysUser;
+import com.eric.core.domain.entity.UserEntity;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
@@ -23,16 +23,16 @@ public interface ISysUserDao {
 //    @Insert("INSERT INTO user(userId,phoneNum,userName,password," + "avatar," + "nickname)" +
     @Insert("INSERT INTO user(userId,phoneNum,userName,password,avatar,nickName,token)" +
             "values(#{userId},#{phoneNum},#{userName},#{password}" + ",#{avatar}" + ",#{nickName},#{token})")
-    int insertItem(SysUser item);
+    int insertItem(UserEntity item);
 
     @Select("SELECT * FROM user ")
-    ArrayList<SysUser> queryAllUser();
+    ArrayList<UserEntity> queryAllUser();
 
     /**
      * 根据userId获取查询用户信息
      */
     @Select("SELECT * FROM user where userId=#{userId} ")
-    List<SysUser> queryByUserId(Long userId);
+    List<UserEntity> queryByUserId(Long userId);
 
     /**
      * 根据userId获取删除用户信息
@@ -43,7 +43,7 @@ public interface ISysUserDao {
      * 根据username获取查询用户信息
      */
     @Select("SELECT * FROM user where userName=#{userName} ")
-    List<SysUser> queryByUsername(String userName);
+    List<UserEntity> queryByUsername(String userName);
 
 
     /**
@@ -51,14 +51,14 @@ public interface ISysUserDao {
      */
     @Update("update user set phoneNum=#{phoneNum}," + "userName=#{userName}," + "password=#{password}," +
             "avatar=#{avatar}," + "nickName=#{nickName}," + "token=#{token} where userId=#{userId}")
-    void updateByUserId(SysUser user);
+    void updateByUserId(UserEntity user);
 
 
     /**
      * 根据 phoneNum 获取查询用户信息
      */
     @Select("SELECT * FROM user where phoneNum=#{phoneNum} ")
-    List<SysUser> findByphoneNum(String phoneNum);
+    List<UserEntity> findByphoneNum(String phoneNum);
 
 
 }

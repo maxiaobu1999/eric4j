@@ -4,7 +4,7 @@ package com.eric.shiro.service;
 import com.eric.constant.Constants;
 import com.eric.constant.ShiroConstants;
 import com.eric.constant.UserConstants;
-import com.eric.core.domain.entity.SysUser;
+import com.eric.core.domain.entity.UserEntity;
 import com.eric.exception.user.CaptchaException;
 import com.eric.exception.user.UserNotExistsException;
 import com.eric.exception.user.UserPasswordNotMatchException;
@@ -16,9 +16,6 @@ import com.eric.utils.ServletUtils;
 import com.eric.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.Set;
 
 /**
  * 登录校验方法
@@ -42,7 +39,7 @@ public class SysLoginService {
     /**
      * 登录
      */
-    public SysUser login(String username, String password) {
+    public UserEntity login(String username, String password) {
         // 验证码校验
         if (ShiroConstants.CAPTCHA_ERROR.equals(ServletUtils.getRequest().getAttribute(ShiroConstants.CURRENT_CAPTCHA))) {
             AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_FAIL, MessageUtils.message("user.jcaptcha.error")));
@@ -77,7 +74,7 @@ public class SysLoginService {
 //        }
 
         // 查询用户信息
-        SysUser user = userService.findByUserName(username);
+        UserEntity user = userService.findByUserName(username);
 
         /**
          if (user == null && maybeMobilePhoneNumber(username))
@@ -141,7 +138,7 @@ public class SysLoginService {
      *
      * @param user 用户信息
      */
-    public void setRolePermission(SysUser user) {
+    public void setRolePermission(UserEntity user) {
 //        List<SysRole> roles = user.getRoles();
 //        if (!roles.isEmpty() && roles.size() > 1)
 //        {

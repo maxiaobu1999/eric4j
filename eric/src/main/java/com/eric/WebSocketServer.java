@@ -8,7 +8,7 @@ import com.eric.model.msg.ChatMessage;
 import com.eric.model.msg.ChatMsg;
 import com.eric.repository.IChatDao;
 import com.eric.repository.entity.ChatEntity;
-import com.eric.core.domain.entity.SysUser;
+import com.eric.core.domain.entity.UserEntity;
 import com.eric.service.UserService;
 import com.eric.utils.Util;
 import com.google.gson.Gson;
@@ -66,8 +66,8 @@ public class WebSocketServer {
         this.token = token;
         addOnlineCount();           //在线数加1
         try {
-            SysUser sysUser = userService.findByUserId(Long.parseLong(token));
-            logger.info("++++" + token + ",当前在线人数为:" + sysUser.userName);
+            UserEntity userEntity = userService.findByUserId(Long.parseLong(token));
+            logger.info("++++" + token + ",当前在线人数为:" + userEntity.userName);
 
             applicationContext.getBean(UserService.class);
         } catch (Exception e) {

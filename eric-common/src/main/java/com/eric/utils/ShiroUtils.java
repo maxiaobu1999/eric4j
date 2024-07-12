@@ -1,6 +1,6 @@
 package com.eric.utils;
 
-import com.eric.core.domain.entity.SysUser;
+import com.eric.core.domain.entity.UserEntity;
 import com.eric.utils.bean.BeanUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
@@ -11,7 +11,7 @@ import org.apache.shiro.subject.Subject;
 
 /**
  * shiro 工具类
- * 
+ *
  * @author zhimin
  */
 public class ShiroUtils
@@ -31,19 +31,19 @@ public class ShiroUtils
         getSubject().logout();
     }
 
-    public static SysUser getSysUser()
+    public static UserEntity getSysUser()
     {
-        SysUser user = null;
+        UserEntity user = null;
         Object obj = getSubject().getPrincipal();
         if (StringUtils.isNotNull(obj))
         {
-            user = new SysUser();
+            user = new UserEntity();
             BeanUtils.copyBeanProp(user, obj);
         }
         return user;
     }
 
-    public static void setSysUser(SysUser user)
+    public static void setSysUser(UserEntity user)
     {
         Subject subject = getSubject();
         PrincipalCollection principalCollection = subject.getPrincipals();

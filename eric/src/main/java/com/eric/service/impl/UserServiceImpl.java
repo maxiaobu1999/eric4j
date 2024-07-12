@@ -1,7 +1,7 @@
 package com.eric.service.impl;
 
 import com.eric.repository.IUserDao;
-import com.eric.core.domain.entity.SysUser;
+import com.eric.core.domain.entity.UserEntity;
 import com.eric.service.UserService;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -17,13 +17,13 @@ public class UserServiceImpl implements UserService {
     private IUserDao mAccountDao;
 
     @Override
-    public int insertAccount(SysUser sysUser) {
-        return mAccountDao.insertItem(sysUser);
+    public int insertAccount(UserEntity userEntity) {
+        return mAccountDao.insertItem(userEntity);
     }
 
     @Override
-    public SysUser findByUserId(Long userId) {
-        List<SysUser> accounts = mAccountDao.queryByUserId(userId);
+    public UserEntity findByUserId(Long userId) {
+        List<UserEntity> accounts = mAccountDao.queryByUserId(userId);
         if (accounts != null && !accounts.isEmpty()) {
             return accounts.get(0);
         }
@@ -31,8 +31,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public SysUser findByUserName(String userName) {
-        List<SysUser> accounts = mAccountDao.queryByUsername(userName);
+    public UserEntity findByUserName(String userName) {
+        List<UserEntity> accounts = mAccountDao.queryByUsername(userName);
         if (accounts != null && !accounts.isEmpty()) {
             return accounts.get(0);
         }
@@ -40,18 +40,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ArrayList<SysUser> queryAllUser() {
+    public ArrayList<UserEntity> queryAllUser() {
         return mAccountDao.queryAllUser();
     }
 
 
     @Override
-    public void updateByUserId(SysUser sysUser) {
-        mAccountDao.updateByUserId(sysUser);
+    public void updateByUserId(UserEntity userEntity) {
+        mAccountDao.updateByUserId(userEntity);
     }
     @Override
-    public SysUser findAccountByPhoneNum(String phoneNum) {
-        List<SysUser> accounts = mAccountDao.findByphoneNum(phoneNum);
+    public UserEntity findAccountByPhoneNum(String phoneNum) {
+        List<UserEntity> accounts = mAccountDao.findByphoneNum(phoneNum);
         if (accounts != null && !accounts.isEmpty()) {
             return accounts.get(0);
         }

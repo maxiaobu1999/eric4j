@@ -1,20 +1,50 @@
 package com.eric.repository;
 
 import com.eric.core.domain.entity.UserEntity;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import com.eric.repository.entity.CategoryEntity;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 账户信息
+ * 产品类型
  */
 @Repository
-public interface IUserDao {
+public interface ICategoryDao {
+    /**
+     * 根据userId获取查询用户信息
+     */
+    @Select("SELECT * FROM mall_category where category_id=#{id} ")
+    List<CategoryEntity> selectItem(Long id);
+
+
+    @Select("SELECT * FROM mall_category ")
+    @Results({
+            @Result(id=true,property="id",column="category_id"),
+            @Result(property="name",column="category_name"),
+            @Result(property="pic",column="pic")
+    })
+    ArrayList<CategoryEntity> selectAll();
+
+
+
+    @Select("SELECT * FROM mall_category WHERE  category_id   BETWEEN #{param1}  AND #{param2}")
+    @Results({
+            @Result(id=true,property="id",column="category_id"),
+            @Result(property="name",column="category_name"),
+            @Result(property="pic",column="pic")
+    })
+    ArrayList<CategoryEntity> selectRange(int start, int end);
+
+
+
+
+
+
+
+
     /**
      * 增加一条
      *
@@ -28,11 +58,7 @@ public interface IUserDao {
     @Select("SELECT * FROM user ")
     ArrayList<UserEntity> queryAllUser();
 
-    /**
-     * 根据userId获取查询用户信息
-     */
-    @Select("SELECT * FROM user where userId=#{userId} ")
-    List<UserEntity> queryByUserId(Long userId);
+
 
     /**
      * 根据userId获取删除用户信息

@@ -5,7 +5,7 @@ import com.eric.BaseResponse;
 import com.eric.constant.Constant;
 import com.eric.jwt.JwtUtils;
 import com.eric.redis.TokenManager;
-import com.eric.core.domain.entity.SysUser;
+import com.eric.core.domain.entity.UserEntity;
 import com.eric.service.SmsCodeService;
 import com.eric.service.UserService;
 import com.eric.utils.PasswordUtils;
@@ -19,7 +19,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import static org.apache.logging.log4j.util.Strings.isEmpty;
 @RestController // 相当于@ResponseBody和@Controller
@@ -49,9 +48,8 @@ public class UserController extends BaseController {
      */
     @SuppressWarnings("Duplicates")
     @RequestMapping(value = {"/login/username"}, method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
-    public BaseResponse<SysUser> loginByUsername(String username, String password, @RequestHeader Map<String, String> headers) {
-        int size = headers.size();
-        BaseResponse<SysUser> responseEntity;
+    public BaseResponse<UserEntity> loginByUsername(String username, String password) {
+        BaseResponse<UserEntity> responseEntity;
         try {
             logger.info("loginByUsername" + ",username:" + username);
             if (StringUtils.isEmpty(username)) {
@@ -62,30 +60,32 @@ public class UserController extends BaseController {
                 responseEntity = new BaseResponse<>(1, "密码是null的");
                 return responseEntity;
             }
-            SysUser sysUser = mUserService.findByUserName(username);
-            if (sysUser == null) {
+            UserEntity userEntity = mUserService.findByUserName(username);
+            if (userEntity == null) {
                 responseEntity = new BaseResponse<>(1, "用户名不存在或密码错误（用户名）");
                 return responseEntity;
             }
 
-            if (!PasswordUtils.matches(sysUser.getSalt(), password, sysUser.getPassword())) {
+            if (!PasswordUtils.matches(userEntity.getSalt(), password, userEntity.getPassword())) {
                 responseEntity = new BaseResponse<>(1, "用户名不存在或密码错误（密码）");
                 return responseEntity;
             }
 
             // 查userId
-            String userId = sysUser.getUserId().toString();
+            String userId = userEntity.getUserId().toString();
             // 更新的token
             String token = mTokenManager.generateToken(Long.parseLong(userId));
             // 生成 accessToken
             String accessToken = JwtUtils.accessSign(username, Long.valueOf(userId));
 
             responseEntity = new BaseResponse<>(0, "登录成功", accessToken);
-            responseEntity.setData(sysUser);
+            responseEntity.setData(userEntity);
         } catch (Exception e) {
             e.printStackTrace();
             responseEntity = new BaseResponse<>(-1, "登录失败，为啥不知道");
         }
+
+
         return responseEntity;
     }
 
@@ -100,8 +100,8 @@ public class UserController extends BaseController {
      */
     @SuppressWarnings("Duplicates")
     @RequestMapping(value = {"/register/username"}, method = {RequestMethod.POST, RequestMethod.GET})
-    public BaseResponse<SysUser> registerByUsername(String username, String password) {
-        BaseResponse<SysUser> responseEntity;
+    public BaseResponse<UserEntity> registerByUsername(String username, String password) {
+        BaseResponse<UserEntity> responseEntity;
         try {
             if (isEmpty(username)) {
                 responseEntity = new BaseResponse<>(1, "用户名是null的");
@@ -111,26 +111,26 @@ public class UserController extends BaseController {
                 responseEntity = new BaseResponse<>(1, "密码是null的");
                 return responseEntity;
             }
-            SysUser accounts = mUserService.findByUserName(username);
+            UserEntity accounts = mUserService.findByUserName(username);
             if (accounts != null) {
                 responseEntity = new BaseResponse<>(1, "用户名已存在");
                 return responseEntity;
             }
 
             // 插入用户信息
-            SysUser sysUser = new SysUser();
-            sysUser.setUserName(username);
-            sysUser.setNickName(username);
-            sysUser.setSalt(PasswordUtils.getSalt());
-            sysUser.setPassword(PasswordUtils.encode(password, sysUser.getSalt()));
+            UserEntity userEntity = new UserEntity();
+            userEntity.setUserName(username);
+            userEntity.setNickName(username);
+            userEntity.setSalt(PasswordUtils.getSalt());
+            userEntity.setPassword(PasswordUtils.encode(password, userEntity.getSalt()));
 
-            sysUser.userId = Util.createUserID();
-            int res = mUserService.insertAccount(sysUser);
+            userEntity.userId = Util.createUserID();
+            int res = mUserService.insertAccount(userEntity);
             logger.info("registerByUsername=="+res);
 
             // 返回数据
-            responseEntity = new BaseResponse<>(0, "注册成功", String.valueOf(sysUser.userId));
-            responseEntity.setData(sysUser);
+            responseEntity = new BaseResponse<>(0, "注册成功", String.valueOf(userEntity.userId));
+            responseEntity.setData(userEntity);
         } catch (Exception e) {
             e.printStackTrace();
             responseEntity = new BaseResponse<>(-1, "注册失败，为啥不知道");
@@ -146,21 +146,26 @@ public class UserController extends BaseController {
      * @return 用户信息
      */
 
-    @RequestMapping(value = {"/info"}, method = {RequestMethod.GET})
-    public BaseResponse<SysUser> account(HttpServletRequest request) {
-        BaseResponse<SysUser> responseEntity;
+    @RequestMapping(value = {"/info"}, method = {RequestMethod.POST,RequestMethod.GET})
+    public BaseResponse<UserEntity> account(HttpServletRequest request) {
+        BaseResponse<UserEntity> responseEntity;
         try {
             String token = request.getHeader(Constant.ACCESS_TOKEN);
             logger.info("QueryUser#{\"url\":{}, \"method\":{}, \"token\":{}}", "/account/queryUser", RequestMethod.GET, token);
             // 查询用户信息
             Long userId = JwtUtils.getUserId(token);
 
-            SysUser accountEntity = mUserService.findByUserId(userId);
+            UserEntity accountEntity = mUserService.findByUserId(userId);
             responseEntity = new BaseResponse<>(0, "获取用户信息成功");
             responseEntity.setData(accountEntity);
         } catch (Exception e) {
             e.printStackTrace();
             responseEntity = new BaseResponse<>(-1, "获取用户信息，为啥不知道");
+        }
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
         return responseEntity;
     }
@@ -223,8 +228,8 @@ public class UserController extends BaseController {
      */
     @SuppressWarnings("Duplicates")
     @RequestMapping(value = {"/delete/userid"}, method = {RequestMethod.POST, RequestMethod.GET})
-    public BaseResponse<SysUser> registerByUsername(String id) {
-        BaseResponse<SysUser> responseEntity;
+    public BaseResponse<UserEntity> registerByUsername(String id) {
+        BaseResponse<UserEntity> responseEntity;
         try {
             if (isEmpty(id)) {
                 responseEntity = new BaseResponse<>(1, "userId是null的");
@@ -254,8 +259,8 @@ public class UserController extends BaseController {
      */
     @SuppressWarnings("Duplicates")
     @RequestMapping(value = {"/modifyPassword/username"}, method = {RequestMethod.POST, RequestMethod.GET})
-    public BaseResponse<SysUser> modifyPasswordByUsername(String username, String passwordOld, String passwordNew) {
-        BaseResponse<SysUser> responseEntity;
+    public BaseResponse<UserEntity> modifyPasswordByUsername(String username, String passwordOld, String passwordNew) {
+        BaseResponse<UserEntity> responseEntity;
         try {
             if (StringUtils.isEmpty(username)) {
                 responseEntity = new BaseResponse<>(1, "用户名是null的");
@@ -269,21 +274,21 @@ public class UserController extends BaseController {
                 responseEntity = new BaseResponse<>(1, "新密码是null的");
                 return responseEntity;
             }
-            SysUser sysUser = mUserService.findByUserName(username);
-            if (sysUser == null) {
+            UserEntity userEntity = mUserService.findByUserName(username);
+            if (userEntity == null) {
                 responseEntity = new BaseResponse<>(1, "用户名不存在或密码错误（用户名null）");
                 return responseEntity;
             }
 
-            if (!passwordOld.equals(sysUser.getPassword())) {
+            if (!passwordOld.equals(userEntity.getPassword())) {
                 responseEntity = new BaseResponse<>(1, "用户名不存在或密码错误（密码）");
                 return responseEntity;
             }
             // 修改密码
-            sysUser.setPassword(passwordNew);
-            mUserService.updateByUserId(sysUser);
+            userEntity.setPassword(passwordNew);
+            mUserService.updateByUserId(userEntity);
             responseEntity = new BaseResponse<>(0, "修改密码成功");
-            responseEntity.setData(sysUser);
+            responseEntity.setData(userEntity);
         } catch (Exception e) {
             e.printStackTrace();
             responseEntity = new BaseResponse<>(-1, "修改密码失败，为啥不知道");
@@ -297,10 +302,10 @@ public class UserController extends BaseController {
      */
     @SuppressWarnings("Duplicates")
     @RequestMapping(value = {"/query/users"}, method = {RequestMethod.POST, RequestMethod.GET})
-    public BaseResponse<ArrayList<SysUser>> queryAllUsers() {
-        BaseResponse<ArrayList<SysUser>> responseEntity;
+    public BaseResponse<ArrayList<UserEntity>> queryAllUsers() {
+        BaseResponse<ArrayList<UserEntity>> responseEntity;
         try {
-            ArrayList<SysUser> userEntities = mUserService.queryAllUser();
+            ArrayList<UserEntity> userEntities = mUserService.queryAllUser();
             responseEntity = new BaseResponse<>(0, "查询成功");
             responseEntity.setData(userEntities);
         } catch (Exception e) {
@@ -320,10 +325,10 @@ public class UserController extends BaseController {
      * @return token
      */
     @RequestMapping(value = {"/register/mobile"}, method = {RequestMethod.POST, RequestMethod.GET})
-    public BaseResponse<SysUser> mobileRegister(
+    public BaseResponse<UserEntity> mobileRegister(
             @RequestParam String phoneNum, @RequestParam String code) {
         logger.info("mobileRegister#{\"url\":{}, \"method\":{}}", "/account", RequestMethod.POST);
-        BaseResponse<SysUser> responseEntity;
+        BaseResponse<UserEntity> responseEntity;
         try {
             if (!Util.isPhone(phoneNum)) {
                 responseEntity = new BaseResponse<>(1, "请输入正确手机号码");
@@ -337,22 +342,22 @@ public class UserController extends BaseController {
                 responseEntity = new BaseResponse<>(1, "验证码填写错误，填1234");
                 return responseEntity;
             }
-            SysUser accounts = mUserService.findAccountByPhoneNum(phoneNum);
+            UserEntity accounts = mUserService.findAccountByPhoneNum(phoneNum);
             if (accounts != null) {
                 responseEntity = new BaseResponse<>(1, "手机号已存在");
                 return responseEntity;
             }
 
             // 插入用户信息
-            SysUser sysUser = new SysUser();
-            sysUser.setPhoneNum(Long.valueOf(phoneNum));
-            sysUser.userId = Util.createUserID();
-            sysUser.userName = String.valueOf(sysUser.userId);
-            mUserService.insertAccount(sysUser);
+            UserEntity userEntity = new UserEntity();
+            userEntity.setPhoneNum(Long.valueOf(phoneNum));
+            userEntity.userId = Util.createUserID();
+            userEntity.userName = String.valueOf(userEntity.userId);
+            mUserService.insertAccount(userEntity);
 
             // 返回数据
-            responseEntity = new BaseResponse<>(0, "注册成功", String.valueOf(sysUser.userId));
-            responseEntity.setData(sysUser);
+            responseEntity = new BaseResponse<>(0, "注册成功", String.valueOf(userEntity.userId));
+            responseEntity.setData(userEntity);
         } catch (Exception e) {
             e.printStackTrace();
             responseEntity = new BaseResponse<>(-1, "注册失败，为啥不知道");
@@ -371,8 +376,8 @@ public class UserController extends BaseController {
      */
     @RequestMapping(value = {"/login/mobile"}, method = {RequestMethod.POST, RequestMethod.GET})
     @SuppressWarnings("Duplicates")
-    public BaseResponse<SysUser> mobileLogin(@RequestParam String phoneNum, @RequestParam String code) {
-        BaseResponse<SysUser> responseEntity;
+    public BaseResponse<UserEntity> mobileLogin(@RequestParam String phoneNum, @RequestParam String code) {
+        BaseResponse<UserEntity> responseEntity;
         try {
             if (!Util.isPhone(phoneNum)) {
                 responseEntity = new BaseResponse<>(1, "请输入正确手机号码");
@@ -386,18 +391,18 @@ public class UserController extends BaseController {
                 responseEntity = new BaseResponse<>(1, "验证码填写错误，填1234");
                 return responseEntity;
             }
-            SysUser sysUser = mUserService.findAccountByPhoneNum(phoneNum);
+            UserEntity userEntity = mUserService.findAccountByPhoneNum(phoneNum);
 
-            if (sysUser == null) {
+            if (userEntity == null) {
                 responseEntity = new BaseResponse<>(1, "用户名不存在或密码错误（用户名）");
                 return responseEntity;
             }
 
             // 查userId
-            String userId = sysUser.getUserId().toString();
+            String userId = userEntity.getUserId().toString();
             // 更新的token
             responseEntity = new BaseResponse<>(0, "登录成功", String.valueOf(userId));
-            responseEntity.setData(sysUser);
+            responseEntity.setData(userEntity);
         } catch (Exception e) {
             e.printStackTrace();
             responseEntity = new BaseResponse<>(-1, "注册失败，为啥不知道");
@@ -415,8 +420,8 @@ public class UserController extends BaseController {
      */
     @SuppressWarnings("Duplicates")
     @RequestMapping(value = {"/modify/avatar"}, method = {RequestMethod.POST, RequestMethod.GET})
-    public BaseResponse<SysUser> modifyPasswordByUsername(String userId, String avatar) {
-        BaseResponse<SysUser> responseEntity;
+    public BaseResponse<UserEntity> modifyPasswordByUsername(String userId, String avatar) {
+        BaseResponse<UserEntity> responseEntity;
         try {
             Long id = -1L;
             try {
@@ -433,16 +438,16 @@ public class UserController extends BaseController {
                 return responseEntity;
             }
 
-            SysUser sysUser = mUserService.findByUserId(id);
-            if (sysUser == null) {
+            UserEntity userEntity = mUserService.findByUserId(id);
+            if (userEntity == null) {
                 responseEntity = new BaseResponse<>(1, "userId不存在");
                 return responseEntity;
             }
             // 修改头像
-            sysUser.setAvatar(avatar);
-            mUserService.updateByUserId(sysUser);
+            userEntity.setAvatar(avatar);
+            mUserService.updateByUserId(userEntity);
             responseEntity = new BaseResponse<>(0, "修改头像成功");
-            responseEntity.setData(sysUser);
+            responseEntity.setData(userEntity);
         } catch (Exception e) {
             e.printStackTrace();
             responseEntity = new BaseResponse<>(-1, "修改头像失败，为啥不知道");

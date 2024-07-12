@@ -2,7 +2,7 @@ package com.eric.shiro.realm;
 
 
 import com.auth0.jwt.interfaces.Claim;
-import com.eric.core.domain.entity.SysUser;
+import com.eric.core.domain.entity.UserEntity;
 import com.eric.jwt.JwtUtils;
 import com.eric.redis.RedisUtils;
 import com.eric.shiro.BearerAuthToken;
@@ -17,7 +17,6 @@ import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -100,7 +99,7 @@ public class ShiroRealm extends AuthorizingRealm {
 
 
 
-    private void setTenantInfo(SysUser user) {
+    private void setTenantInfo(UserEntity user) {
         if (user.isAdmin()) {
             return;
         }

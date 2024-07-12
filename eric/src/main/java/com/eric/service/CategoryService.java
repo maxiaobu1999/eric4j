@@ -1,30 +1,30 @@
 package com.eric.service;
 
+import com.eric.repository.entity.CategoryEntity;
 import com.eric.repository.entity.Product;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 商品
+ * 商品类别
  */
-public interface ProductService {
+public interface CategoryService {
     /**
      * 根据商品id获取商品信息
      *
      * @param prodId
      * @return
      */
-    Product getItem(Long prodId);
+    CategoryEntity getItem(Long prodId);
 
     /**
      * 根据商品id获取商品信息
      *
      * @return
      */
-    List<Product> SelectAll();
+    List<CategoryEntity> SelectAll();
 
-    List<Product> selectRange(int start, int end);
+    List<CategoryEntity> selectRange(int start, int end);
 
 
 

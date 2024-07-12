@@ -32,7 +32,7 @@ public class Product {
     /**
      * 商品名称
      */
-    private String prodName;
+    private String name;
 
     /**
      * 原价
@@ -285,12 +285,12 @@ public class Product {
         this.oriPrice = oriPrice;
     }
 
-    public String getProdName() {
-        return prodName;
+    public String getName() {
+        return name;
     }
 
-    public void setProdName(String prodName) {
-        this.prodName = prodName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Long getShopId() {

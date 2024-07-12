@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /** 账户信息 */
 //@Data
-public class SysUser {
+public class UserEntity {
     /** 用户ID */
     public Long userId;
-    /** 手机号码 */
+    /** 手机号码 mobile todo*/
     public Long phoneNum;
     /** 用户名 */
     public String userName;

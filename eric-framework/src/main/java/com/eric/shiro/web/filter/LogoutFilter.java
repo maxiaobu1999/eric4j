@@ -1,13 +1,12 @@
 package com.eric.shiro.web.filter;
 
 import com.eric.constant.Constants;
-import com.eric.core.domain.entity.SysUser;
+import com.eric.core.domain.entity.UserEntity;
 import com.eric.manager.AsyncManager;
 import com.eric.manager.factory.AsyncFactory;
 import com.eric.utils.MessageUtils;
 import com.eric.utils.ShiroUtils;
 import com.eric.utils.StringUtils;
-import com.eric.utils.spring.SpringUtils;
 import org.apache.shiro.session.SessionException;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
@@ -18,7 +17,7 @@ import javax.servlet.ServletResponse;
 
 /**
  * 退出过滤器
- * 
+ *
  * @author zhimin
  */
 public class LogoutFilter extends org.apache.shiro.web.filter.authc.LogoutFilter
@@ -49,7 +48,7 @@ public class LogoutFilter extends org.apache.shiro.web.filter.authc.LogoutFilter
             String redirectUrl = getRedirectUrl(request, response, subject);
             try
             {
-                SysUser user = ShiroUtils.getSysUser();
+                UserEntity user = ShiroUtils.getSysUser();
                 if (StringUtils.isNotNull(user))
                 {
                     String loginName = user.getUserName();

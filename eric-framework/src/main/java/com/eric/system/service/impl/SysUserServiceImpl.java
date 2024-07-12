@@ -1,6 +1,6 @@
 package com.eric.system.service.impl;
 
-import com.eric.core.domain.entity.SysUser;
+import com.eric.core.domain.entity.UserEntity;
 import com.eric.system.repository.ISysUserDao;
 import com.eric.system.service.ISysUserService;
 import org.springframework.context.annotation.Primary;
@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  * 用户 业务层处理
- * 
+ *
  * @author zhimin
  */
 @Primary // 解决 expected single matching bean but found 2: accountServiceImpl,accountService
@@ -23,13 +23,13 @@ public class SysUserServiceImpl implements ISysUserService
     private ISysUserDao mAccountDao;
 
     @Override
-    public int insertAccount(SysUser sysUser) {
-        return mAccountDao.insertItem(sysUser);
+    public int insertAccount(UserEntity userEntity) {
+        return mAccountDao.insertItem(userEntity);
     }
 
     @Override
-    public SysUser queryByUserId(Long userId) {
-        List<SysUser> accounts = mAccountDao.queryByUserId(userId);
+    public UserEntity queryByUserId(Long userId) {
+        List<UserEntity> accounts = mAccountDao.queryByUserId(userId);
         if (accounts != null && !accounts.isEmpty()) {
             return accounts.get(0);
         }
@@ -37,8 +37,8 @@ public class SysUserServiceImpl implements ISysUserService
     }
 
     @Override
-    public SysUser findByUserName(String userName) {
-        List<SysUser> accounts = mAccountDao.queryByUsername(userName);
+    public UserEntity findByUserName(String userName) {
+        List<UserEntity> accounts = mAccountDao.queryByUsername(userName);
         if (accounts != null && !accounts.isEmpty()) {
             return accounts.get(0);
         }
@@ -46,14 +46,14 @@ public class SysUserServiceImpl implements ISysUserService
     }
 
     @Override
-    public ArrayList<SysUser> queryAllUser() {
+    public ArrayList<UserEntity> queryAllUser() {
         return mAccountDao.queryAllUser();
     }
 
 
     @Override
-    public void updateByUserId(SysUser sysUser) {
-        mAccountDao.updateByUserId(sysUser);
+    public void updateByUserId(UserEntity userEntity) {
+        mAccountDao.updateByUserId(userEntity);
     }
 
     @Override
@@ -62,8 +62,8 @@ public class SysUserServiceImpl implements ISysUserService
     }
 
     @Override
-    public SysUser findAccountByPhoneNum(String phoneNum) {
-        List<SysUser> accounts = mAccountDao.findByphoneNum(phoneNum);
+    public UserEntity findAccountByPhoneNum(String phoneNum) {
+        List<UserEntity> accounts = mAccountDao.findByphoneNum(phoneNum);
         if (accounts != null && !accounts.isEmpty()) {
             return accounts.get(0);
         }
