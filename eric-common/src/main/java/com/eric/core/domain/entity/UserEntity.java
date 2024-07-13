@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 //@Data
 public class UserEntity {
     /** 用户ID */
-    public Long userId;
+    public String userId;
     /** 手机号码 mobile todo*/
     public Long phoneNum;
     /** 用户名 */
@@ -39,7 +39,7 @@ public class UserEntity {
 
     public boolean isAdmin()
     {
-        return isAdmin(userId);
+        return isAdmin(Long.parseLong(userId));
     }
     public static boolean isAdmin(Long userId)
     {
@@ -52,11 +52,11 @@ public class UserEntity {
 
 
 
-    public Long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 

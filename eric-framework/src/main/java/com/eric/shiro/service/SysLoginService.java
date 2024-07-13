@@ -109,7 +109,7 @@ public class SysLoginService {
 
         AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success")));
         setRolePermission(user);
-        recordLoginInfo(user.getUserId());
+        recordLoginInfo(Long.parseLong(user.getUserId()));
         return user;
     }
 

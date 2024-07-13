@@ -182,6 +182,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/category/info", "anon");
         filterChainDefinitionMap.put("/category/page", "anon");
         filterChainDefinitionMap.put("/category/range", "anon");
+        filterChainDefinitionMap.put("/sys/menu/nav", "anon");
 
         filterChainDefinitionMap.put("/advertisement", "anon");
 

@@ -73,8 +73,8 @@ spring:
     database: 0   #redis的0号数据库
     host: 106.14.58.169
     port: 6379
-    #    password: 123456
-    timeout: 600 #连接超时时间600毫秒
+    password: 123456
+    timeout: 60000 #连接超时时间600毫秒
     lettuce:
       pool:
         max-active: 60 #连接池最大连接数

@@ -55,7 +55,7 @@ public class ShiroUtils
 
     public static Long getUserId()
     {
-        return getSysUser().getUserId();
+        return Long.parseLong(getSysUser().getUserId());
     }
 
     public static String getLoginName()

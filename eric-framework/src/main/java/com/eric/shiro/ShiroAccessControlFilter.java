@@ -62,9 +62,7 @@ public class ShiroAccessControlFilter extends AccessControlFilter {
      */
     @Override
     protected boolean onAccessDenied(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
-
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-
         log.info("onAccessDenied = " + request.getMethod());
         log.info("onAccessDenied = " + request.getRequestURL().toString());
         boolean access = true;
