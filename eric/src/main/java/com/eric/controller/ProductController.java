@@ -35,7 +35,7 @@ public class ProductController extends BaseController {
      */
     @RequestMapping(value = {"/info"}, method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
     public BaseResponse<Product> info(Long prodId) {
-
+        logger.info("info: prodId={}", prodId );
         BaseResponse<Product> responseEntity;
         try {
             logger.info("info" + ",prodId:" + prodId);

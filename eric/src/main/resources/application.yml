@@ -74,7 +74,7 @@ spring:
     host: 106.14.58.169
     port: 6379
     password: 123456
-    timeout: 60000 #连接超时时间600毫秒
+    timeout: 600000 #连接超时时间600毫秒
     lettuce:
       pool:
         max-active: 60 #连接池最大连接数
@@ -148,7 +148,7 @@ session:
 
 
 jwt:
-  accessTokenExpireTime: 60000
+  accessTokenExpireTime: 600000
   # 1000*60*60*24 24\u4E2A\u5C0F\u65F6
   refreshTokenExpireTime: 86400000
   issuer: StarPay

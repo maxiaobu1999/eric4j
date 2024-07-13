@@ -175,7 +175,6 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/user/login/username", "anon");
         filterChainDefinitionMap.put("/user/register/username", "anon");
         filterChainDefinitionMap.put("/user/login/v2/username", "anon");
-        filterChainDefinitionMap.put("/user/login/v2/username", "anon");
         filterChainDefinitionMap.put("/prod/info", "anon");
         filterChainDefinitionMap.put("/prod/page", "anon");
         filterChainDefinitionMap.put("/prod/newProd", "anon");
