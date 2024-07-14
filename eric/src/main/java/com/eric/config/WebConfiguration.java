@@ -41,15 +41,17 @@ public class WebConfiguration implements WebMvcConfigurer {
                 .setCachePeriod(1);
 
         registry.addResourceHandler("/source/test/**")
-                .addResourceLocations("file:D:/sources/test/")
+                .addResourceLocations("file:D:/backend/sources/test/")
                 .addResourceLocations("file:/home/ecs-assist-user/eric/sources/test/");
         registry.addResourceHandler("/source/avatar/**")
-                .addResourceLocations("file:D:/sources/avatar/")
+                .addResourceLocations("file:D:/backend/sources/avatar/")
                 .addResourceLocations("file:/home/ecs-assist-user/eric/sources/avatar/");
         registry.addResourceHandler("/source/chensheng/**")
-                .addResourceLocations("file:D:/sources/chensheng/")
+                .addResourceLocations("file:D:/backend/sources/chensheng/")
                 .addResourceLocations("file:/home/ecs-assist-user/eric/sources/chensheng/");
-
+        registry.addResourceHandler("/source/eric4j/**")
+                .addResourceLocations("file:D:/backend/sources/eric4j/")
+                .addResourceLocations("file:/home/ecs-assist-user/eric/sources/eric4j/");
 
         // umi的资源文件uri写的 /xxx
         registry.addResourceHandler("/*")

@@ -182,9 +182,15 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/category/page", "anon");
         filterChainDefinitionMap.put("/category/range", "anon");
         filterChainDefinitionMap.put("/sys/menu/nav", "anon");
-
         filterChainDefinitionMap.put("/advertisement", "anon");
 
+
+        // http://106.14.58.169:8089/source/eric4j/home_banner2.jpg
+        // 以下四个 为 静态资源
+        filterChainDefinitionMap.put("/source/test/**", "anon");
+        filterChainDefinitionMap.put("/source/avatar/**", "anon");
+        filterChainDefinitionMap.put("/source/chensheng/**", "anon");
+        filterChainDefinitionMap.put("/source/eric4j/**", "anon");
 
         //自定义拦截器限制并发人数,参考博客：
         LinkedHashMap<String, Filter> filtersMap = new LinkedHashMap<>();
