@@ -10,16 +10,13 @@ import com.eric.service.SmsCodeService;
 import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
 
 @RestController // 相当于@ResponseBody和@Controller
-@RequestMapping(value = "/category")// 配置url映射,一级
+@RequestMapping(value = "/prod/category")// 配置url映射,一级
 @CrossOrigin(origins = "*")// 解决浏览器跨域问题(局部)
 @SuppressWarnings("Duplicates") // 去除代码重复警告
 public class CategoryController extends BaseController {
@@ -70,6 +67,23 @@ public class CategoryController extends BaseController {
         return responseEntity;
     }
 
+    /**
+     * 获取信息
+     */
+    @RequestMapping(value = {"/listCategory"}, method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
+    public BaseResponse<List<CategoryEntity>> listCategory() {
+
+        BaseResponse<List<CategoryEntity>> responseEntity;
+        try {
+            List<CategoryEntity> list = mService.SelectAll();
+            responseEntity = new BaseResponse<>(0, "成功");
+            responseEntity.setData(list);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseEntity = new BaseResponse<>(-1, "error : "+e.getMessage());
+        }
+        return responseEntity;
+    }
 
     /**
      * 新品推荐

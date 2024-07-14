@@ -8,6 +8,7 @@ import com.eric.service.CategoryService;
 import com.eric.service.ProductService;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -31,6 +32,7 @@ public class CategoryServiceImpl implements CategoryService {
         List<CategoryEntity> list = mCategoryDao.selectAll();
         return list;
     }
+
 
     /**
      * 新品推荐
