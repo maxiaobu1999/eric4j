@@ -1,30 +1,14 @@
-/*
- * Copyright (c) 2018-2999 广州市蓝海创新科技有限公司 All rights reserved.
- *
- * https://www.mall4j.com/
- *
- * 未经允许，不可做商业用途！
- *
- * 版权所有，侵权必究！
- */
-
 package com.eric.controller;
 
 
-import cn.hutool.core.collection.CollectionUtil;
 import com.eric.BaseResponse;
 import com.eric.repository.entity.ProdTag;
-import com.eric.repository.entity.Product;
 import com.eric.service.ProdTagService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.validation.Valid;
-import java.util.Date;
-import java.util.List;
 
 /**
  * 商品分组
@@ -68,7 +52,7 @@ public class ProdTagController {
      */
     @GetMapping("/info/{id}")
     public BaseResponse<ProdTag> getById(@PathVariable("id") Long id) {
-        log.info("info: id={}", id );
+        log.info("info: id={}", id);
         BaseResponse<ProdTag> responseEntity;
         try {
             log.info("info" + ",prodId:" + id);
@@ -77,7 +61,7 @@ public class ProdTagController {
             responseEntity.setData(prod);
         } catch (Exception e) {
             e.printStackTrace();
-            responseEntity = new BaseResponse<>(-1, "error : "+e.getMessage());
+            responseEntity = new BaseResponse<>(-1, "error : " + e.getMessage());
         }
         return responseEntity;
     }

@@ -3,22 +3,29 @@ package com.eric.controller;
 
 import com.eric.BaseResponse;
 import com.eric.repository.entity.Product;
-import com.eric.response.ServerResponseEntity;
 import com.eric.service.ProductService;
 import com.eric.service.SmsCodeService;
 import com.github.pagehelper.PageHelper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Objects;
 
 @RestController // 相当于@ResponseBody和@Controller
 @RequestMapping(value = "/prod")// 配置url映射,一级
 @CrossOrigin(origins = "*")// 解决浏览器跨域问题(局部)
+@Api(value = "activity", description = "商品接口")
 @SuppressWarnings("Duplicates") // 去除代码重复警告
 public class ProductController extends BaseController {
     private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
@@ -33,9 +40,11 @@ public class ProductController extends BaseController {
     /**
      * 获取信息
      */
+    @ApiOperation("通过分类id商品信息")
+    @ApiImplicitParam(name = "Product", value = "预售订单核销", paramType = "body", required = true, dataType = "Product")
     @RequestMapping(value = {"/info"}, method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
-    public BaseResponse<Product> info(Long prodId) {
-        logger.info("info: prodId={}", prodId );
+    public BaseResponse<Product> info( @ApiParam("商品ID")Long prodId) {
+        logger.info("info: prodId={}", prodId);
         BaseResponse<Product> responseEntity;
         try {
             logger.info("info" + ",prodId:" + prodId);
@@ -44,7 +53,7 @@ public class ProductController extends BaseController {
             responseEntity.setData(prod);
         } catch (Exception e) {
             e.printStackTrace();
-            responseEntity = new BaseResponse<>(-1, "error : "+e.getMessage());
+            responseEntity = new BaseResponse<>(-1, "error : " + e.getMessage());
         }
         return responseEntity;
     }

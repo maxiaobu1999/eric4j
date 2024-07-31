@@ -178,11 +178,18 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/prod/info", "anon");
         filterChainDefinitionMap.put("/prod/page", "anon");
         filterChainDefinitionMap.put("/prod/newProd", "anon");
-        filterChainDefinitionMap.put("/category/info", "anon");
-        filterChainDefinitionMap.put("/category/page", "anon");
-        filterChainDefinitionMap.put("/category/range", "anon");
+        filterChainDefinitionMap.put("/prod/category/info", "anon");
+        filterChainDefinitionMap.put("/prod/category/page", "anon");
+        filterChainDefinitionMap.put("/prod/category/range", "anon");
         filterChainDefinitionMap.put("/sys/menu/nav", "anon");
         filterChainDefinitionMap.put("/advertisement", "anon");
+        filterChainDefinitionMap.put("/weather", "anon");
+        filterChainDefinitionMap.put("/notice/list", "anon");
+
+        filterChainDefinitionMap.put("/swagger-ui/**", "anon");
+        filterChainDefinitionMap.put("/swagger-resources/**", "anon");
+        filterChainDefinitionMap.put("/v3/**", "anon");
+        filterChainDefinitionMap.put("/favicon.ico", "anon");
 
 
         // http://106.14.58.169:8089/source/eric4j/home_banner2.jpg

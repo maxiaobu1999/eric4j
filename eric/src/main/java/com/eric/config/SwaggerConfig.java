@@ -17,7 +17,7 @@ import java.util.List;
 
 /**
  * Swagger2的接口配置
- * 
+ *
  * @author zhimin
  */
 @Configuration
@@ -26,7 +26,7 @@ public class SwaggerConfig
     /** 是否开启swagger */
     @Value("${swagger.enabled}")
     private boolean enabled;
-    
+
     /**
      * 创建API
      */
@@ -37,18 +37,13 @@ public class SwaggerConfig
                 // 是否启用Swagger
                 .enable(enabled)
                 // 用来创建该API的基本信息，展示在文档的页面中（自定义展示的信息）
-                .apiInfo(apiInfo()).groupName("ShunHe meta service API")
+                .apiInfo(apiInfo()).groupName("Mall4J service API")
                 // 设置哪些接口暴露给Swagger展示
                 .select()
                 // 扫描所有有注解的api，用这种方式更灵活
                 .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
-                // 扫描指定包中的swagger注解
-                //.apis(RequestHandlerSelectors.basePackage("com.chinasoft.shunhe.project.tool.swagger"))
-                // 扫描所有 .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any())
                 .build()
-                // 生成全局通用参数
-                // .globalRequestParameters(getGlobalRequestParameters())
                 // 生成通用响应信息
                 .globalResponses(HttpMethod.GET, getGlobalResonseMessage())
                 .globalResponses(HttpMethod.POST, getGlobalResonseMessage())

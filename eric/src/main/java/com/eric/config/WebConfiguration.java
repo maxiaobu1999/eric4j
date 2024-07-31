@@ -1,7 +1,12 @@
 package com.eric.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.*;
+
+import java.nio.charset.Charset;
+import java.util.List;
 
 /** 静态资源配置 同时解决跨域问题 */
 @Configuration
@@ -15,7 +20,13 @@ public class WebConfiguration implements WebMvcConfigurer {
                 .allowedMethods("*");// 允许所有请求
     }
 
-//    @Override
+    @Override
+    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        converters.add(new StringHttpMessageConverter(Charset.forName("UTF-8")));
+        WebMvcConfigurer.super.configureMessageConverters(converters);
+    }
+
+    //    @Override
 //    public void addInterceptors(InterceptorRegistry registry) {
 //        // 添加token拦截器
 //        registry.addInterceptor(new TokenInterceptor())

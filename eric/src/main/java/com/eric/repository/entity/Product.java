@@ -10,6 +10,8 @@
 
 package com.eric.repository.entity;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 import java.util.List;
 
@@ -22,6 +24,7 @@ public class Product {
     /**
      * 商品ID
      */
+    @ApiModelProperty("商品ID")
     private Long prodId;
 
     /**

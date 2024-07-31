@@ -4,6 +4,16 @@ public class CategoryEntity {
     String id;
     String name;
     String pic;
+    String url;
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
 
     public String getPic() {
         return pic;
