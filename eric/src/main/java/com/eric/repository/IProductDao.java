@@ -9,28 +9,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 账户信息
+ * 商品
  */
 @Repository
 public interface IProductDao {
     /**
      * 根据userId获取查询用户信息
      */
-    @Select("SELECT * FROM mall_prod where prod_id=#{prodId} ")
+    @Select("SELECT * FROM tz_prod where prod_id=#{prodId} ")
     List<Product> selectItem(Long prodId);
 
 
-    @Select("SELECT * FROM mall_prod ")
+    @Select("SELECT * FROM tz_prod ")
     @Results({
             @Result(id=true,property="prodId",column="prod_id"),
-            @Result(property="name",column="prod_name"),
             @Result(property="oriPrice",column="ori_price")
     })
     ArrayList<Product> selectAll();
 
 
 
-    @Select("SELECT * FROM mall_prod WHERE  prod_id   BETWEEN #{param1}  AND #{param2}")
+    @Select("SELECT * FROM tz_prod WHERE  prod_id   BETWEEN #{param1}  AND #{param2}")
     @Results({
             @Result(id=true,property="prodId",column="prod_id"),
             @Result(property="name",column="prod_name"),

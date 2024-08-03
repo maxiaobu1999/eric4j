@@ -175,12 +175,17 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/user/login/username", "anon");
         filterChainDefinitionMap.put("/user/register/username", "anon");
         filterChainDefinitionMap.put("/user/login/v2/username", "anon");
+        filterChainDefinitionMap.put("/prod/**", "anon");
         filterChainDefinitionMap.put("/prod/info", "anon");
         filterChainDefinitionMap.put("/prod/page", "anon");
         filterChainDefinitionMap.put("/prod/newProd", "anon");
         filterChainDefinitionMap.put("/prod/category/info", "anon");
         filterChainDefinitionMap.put("/prod/category/page", "anon");
         filterChainDefinitionMap.put("/prod/category/range", "anon");
+        filterChainDefinitionMap.put("/sku/**", "anon");
+
+
+
         filterChainDefinitionMap.put("/sys/menu/nav", "anon");
         filterChainDefinitionMap.put("/advertisement", "anon");
         filterChainDefinitionMap.put("/weather", "anon");

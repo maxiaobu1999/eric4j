@@ -1,4 +1,5 @@
-# @ComponentScan
+# swagger
+@ComponentScan
 @ApiOperation(value = "接口说明", httpMethod = "接口请求方式", response = "接口返回参数类型", notes = "接口发布说明")
 @ApiParam(required = "是否必须参数", name = "参数名称", value = "参数具体描述")
 

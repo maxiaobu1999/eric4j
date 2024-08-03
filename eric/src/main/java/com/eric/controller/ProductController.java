@@ -1,10 +1,18 @@
 package com.eric.controller;
 
 
+import cn.hutool.core.bean.BeanUtil;
 import com.eric.BaseResponse;
+import com.eric.repository.dto.ProductDto;
 import com.eric.repository.entity.Product;
+import com.eric.repository.entity.Sku;
+import com.eric.repository.entity.TestEntity;
+import com.eric.repository.entity.Transport;
 import com.eric.service.ProductService;
+import com.eric.service.SkuService;
 import com.eric.service.SmsCodeService;
+import com.eric.service.TransportService;
+import com.eric.utils.Json;
 import com.github.pagehelper.PageHelper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -29,28 +37,43 @@ import java.util.List;
 @SuppressWarnings("Duplicates") // 去除代码重复警告
 public class ProductController extends BaseController {
     private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
-    //
-//    @Resource
-//    private TokenManager mTokenManager;
-    @Resource
-    private SmsCodeService mSmsCodeService;
+
     @Resource
     private ProductService mService;
-
+    @Resource
+    private SkuService mSkuService;
+    @Resource
+    private TransportService mTransportService;
     /**
      * 获取信息
      */
     @ApiOperation("通过分类id商品信息")
     @ApiImplicitParam(name = "Product", value = "预售订单核销", paramType = "body", required = true, dataType = "Product")
     @RequestMapping(value = {"/info"}, method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
-    public BaseResponse<Product> info( @ApiParam("商品ID")Long prodId) {
+    public BaseResponse<ProductDto> info(@ApiParam("商品ID") Long prodId) {
         logger.info("info: prodId={}", prodId);
-        BaseResponse<Product> responseEntity;
+        logger.info("info: prodId={}", new TestEntity().getName());
+        BaseResponse<ProductDto> responseEntity;
         try {
             logger.info("info" + ",prodId:" + prodId);
-            Product prod = mService.getItem(prodId);
+            Product product = mService.getItem(prodId);
+            if (product == null) {
+                return BaseResponse.success();
+            }
+            // 启用的sku列表
+            List<Sku> skuList = mSkuService.listByProdId(prodId);
+            product.setSkuList(skuList);
+            ProductDto productDto = BeanUtil.copyProperties(product, ProductDto.class);
+            // 商品的配送方式
+            Product.DeliveryModeVO deliveryModeVO = Json.parseObject(product.getDeliveryMode(), Product.DeliveryModeVO.class);
+            // 有店铺配送的方式, 且存在运费模板，才返回运费模板的信息，供前端查阅
+            if (deliveryModeVO.getHasShopDelivery()  && product.getDeliveryTemplateId() != null) {
+                Transport transportAndAllItems = mTransportService.getTransportAndAllItems(product.getDeliveryTemplateId());
+                productDto.setTransport(transportAndAllItems);
+            }
+
             responseEntity = new BaseResponse<>(0, "成功");
-            responseEntity.setData(prod);
+            responseEntity.setData(productDto);
         } catch (Exception e) {
             e.printStackTrace();
             responseEntity = new BaseResponse<>(-1, "error : " + e.getMessage());
@@ -63,18 +86,18 @@ public class ProductController extends BaseController {
      * 获取信息
      */
     @RequestMapping(value = {"/page"}, method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
-    public BaseResponse<List<Product>> selectAll(int pageNum,int pageSize) {
+    public BaseResponse<List<Product>> selectAll(int pageNum, int pageSize) {
 
         BaseResponse<List<Product>> responseEntity;
         try {
             logger.info("page" + ",pageNum:" + pageNum);
-            PageHelper.startPage(pageNum,pageSize);
+            PageHelper.startPage(pageNum, pageSize);
             List<Product> list = mService.SelectAll();
             responseEntity = new BaseResponse<>(0, "成功");
             responseEntity.setData(list);
         } catch (Exception e) {
             e.printStackTrace();
-            responseEntity = new BaseResponse<>(-1, "error : "+e.getMessage());
+            responseEntity = new BaseResponse<>(-1, "error : " + e.getMessage());
         }
         return responseEntity;
     }
@@ -88,13 +111,13 @@ public class ProductController extends BaseController {
 
         BaseResponse<List<Product>> responseEntity;
         try {
-            logger.info("newProd" );
+            logger.info("newProd");
             List<Product> list = mService.selectRange(100, 105);
             responseEntity = new BaseResponse<>(0, "成功");
             responseEntity.setData(list);
         } catch (Exception e) {
             e.printStackTrace();
-            responseEntity = new BaseResponse<>(-1, "error : "+e.getMessage());
+            responseEntity = new BaseResponse<>(-1, "error : " + e.getMessage());
         }
         return responseEntity;
     }
