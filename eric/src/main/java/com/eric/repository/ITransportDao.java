@@ -33,7 +33,7 @@ public interface ITransportDao {
             "LEFT JOIN tz_transfee fee ON port.transport_id = fee.transport_id " +
             "LEFT JOIN tz_transcity city  ON  fee.transfee_id = city.transfee_id " +
             "LEFT JOIN  tz_area ta   ON  city.city_id = ta.area_id " +
-            "WHERE port.transport_id = #{id} and m.type != 2 order by fee.transfee_id")
+            "WHERE port.transport_id = #{id}  order by fee.transfee_id")
     Transport getTransportAndTransfeeAndTranscity(Long id);
 
     /**
@@ -47,6 +47,10 @@ public interface ITransportDao {
      * @param transportId
      * @return
      */
+    @Select("SELECT feefree.*,cityfree.*,ta.*  FROM  tz_transfee_free feefree " +
+            "LEFT JOIN tz_transcity_free cityfree  ON feefree.transfee_free_id = cityfree.transfee_free_id " +
+            "LEFT JOIN tz_area ta   ON  cityfree.free_city_id = ta.area_id " +
+            "WHERE  feefree.transport_id = #{transportId}  order by feefree.transfee_free_id")
     List<TransfeeFree> getTransfeeFreeAndTranscityFreeByTransportId(@Param("transportId") Long transportId);
 
 }

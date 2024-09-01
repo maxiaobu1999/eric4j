@@ -31,8 +31,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserEntity findByUserName(String userName) {
-        List<UserEntity> accounts = mAccountDao.queryByUsername(userName);
+    public UserEntity findByName(String realName) {
+        List<UserEntity> accounts = mAccountDao.queryByName(realName);
         if (accounts != null && !accounts.isEmpty()) {
             return accounts.get(0);
         }

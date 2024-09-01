@@ -16,11 +16,27 @@ public interface ICategoryDao {
     /**
      * 根据userId获取查询用户信息
      */
-    @Select("SELECT * FROM mall_category where category_id=#{id} ")
+    @Select("SELECT * FROM tz_category WHERE parent_id=#{parentId} AND status = 1  ORDER BY seq")
+//    @Results({
+//            @Result(id=true,property="id",column="category_id"),
+//            @Result(property="name",column="category_name"),
+//            @Result(property="pic",column="pic")
+//    })
+    List<CategoryEntity> listByParentId(Long parentId);
+
+    /**
+     * 根据userId获取查询用户信息
+     */
+    @Select("SELECT * FROM tz_category where category_id=#{id} ")
+    @Results({
+            @Result(id=true,property="id",column="category_id"),
+            @Result(property="name",column="category_name"),
+            @Result(property="pic",column="pic")
+    })
     List<CategoryEntity> selectItem(Long id);
 
 
-    @Select("SELECT * FROM mall_category ")
+    @Select("SELECT * FROM tz_category ")
     @Results({
             @Result(id=true,property="id",column="category_id"),
             @Result(property="name",column="category_name"),
@@ -30,12 +46,12 @@ public interface ICategoryDao {
 
 
 
-    @Select("SELECT * FROM mall_category WHERE  category_id   BETWEEN #{param1}  AND #{param2}")
-    @Results({
-            @Result(id=true,property="id",column="category_id"),
-            @Result(property="name",column="category_name"),
-            @Result(property="pic",column="pic")
-    })
+    @Select("SELECT * FROM tz_category WHERE  category_id   BETWEEN #{param1}  AND #{param2}")
+//    @Results({
+//            @Result(id=true,property="id",column="category_id"),
+//            @Result(property="name",column="category_name"),
+//            @Result(property="pic",column="pic")
+//    })
     ArrayList<CategoryEntity> selectRange(int start, int end);
 
 

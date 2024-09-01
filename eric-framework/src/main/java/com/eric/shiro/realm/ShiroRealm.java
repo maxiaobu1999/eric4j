@@ -100,9 +100,9 @@ public class ShiroRealm extends AuthorizingRealm {
 
 
     private void setTenantInfo(UserEntity user) {
-        if (user.isAdmin()) {
+//        if (user.isAdmin()) {
             return;
-        }
+//        }
 //        try {
 //            // 将用户的商户ID、分店ID、门店ID 放到缓存里面
 //            SysDept sysDept = deptService.selectDeptById(user.getDeptId());

@@ -21,4 +21,15 @@ public class SkuServiceImpl implements SkuService {
         return list;
     }
 
+    @Override
+    public Sku getSkuBySkuId(Long skuId) {
+        Sku item = mDao.selectById(skuId);
+        return item;
+    }
+
+    @Override
+    public void removeSkuCacheBySkuId(Long skuId, Long prodId) {
+
+    }
+
 }

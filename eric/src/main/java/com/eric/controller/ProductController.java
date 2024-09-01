@@ -49,7 +49,7 @@ public class ProductController extends BaseController {
      */
     @ApiOperation("通过分类id商品信息")
     @ApiImplicitParam(name = "Product", value = "预售订单核销", paramType = "body", required = true, dataType = "Product")
-    @RequestMapping(value = {"/info"}, method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
+    @RequestMapping(value = {"/info"}, method = {RequestMethod.GET})
     public BaseResponse<ProductDto> info(@ApiParam("商品ID") Long prodId) {
         logger.info("info: prodId={}", prodId);
         logger.info("info: prodId={}", new TestEntity().getName());
@@ -85,9 +85,8 @@ public class ProductController extends BaseController {
     /**
      * 获取信息
      */
-    @RequestMapping(value = {"/page"}, method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
+    @RequestMapping(value = {"/page"}, method = { RequestMethod.POST})
     public BaseResponse<List<Product>> selectAll(int pageNum, int pageSize) {
-
         BaseResponse<List<Product>> responseEntity;
         try {
             logger.info("page" + ",pageNum:" + pageNum);

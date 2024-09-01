@@ -12,10 +12,11 @@ package com.eric.repository.entity;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 import java.util.Date;
 import java.util.List;
-
+@Data
 public class Product {
 
 
@@ -128,6 +129,7 @@ public class Product {
     private List<Long> tagList;
 
 
+    @Data
     public static class DeliveryModeVO {
         /**
          * 用户自提
@@ -139,201 +141,7 @@ public class Product {
          */
         private Boolean hasShopDelivery;
 
-        public Boolean getHasUserPickUp() {
-            return hasUserPickUp;
-        }
 
-        public void setHasUserPickUp(Boolean hasUserPickUp) {
-            this.hasUserPickUp = hasUserPickUp;
-        }
-
-        public Boolean getHasShopDelivery() {
-            return hasShopDelivery;
-        }
-
-        public void setHasShopDelivery(Boolean hasShopDelivery) {
-            this.hasShopDelivery = hasShopDelivery;
-        }
     }
 
-// =================================================================================================
-
-
-
-
-    public Long getProdId() {
-        return prodId;
-    }
-
-    public void setProdId(Long prodId) {
-        this.prodId = prodId;
-    }
-
-    public Long getShopId() {
-        return shopId;
-    }
-
-    public void setShopId(Long shopId) {
-        this.shopId = shopId;
-    }
-
-    public String getProdName() {
-        return prodName;
-    }
-
-    public void setProdName(String prodName) {
-        this.prodName = prodName;
-    }
-
-    public Double getOriPrice() {
-        return oriPrice;
-    }
-
-    public void setOriPrice(Double oriPrice) {
-        this.oriPrice = oriPrice;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
-    public String getBrief() {
-        return brief;
-    }
-
-    public void setBrief(String brief) {
-        this.brief = brief;
-    }
-
-    public String getPic() {
-        return pic;
-    }
-
-    public void setPic(String pic) {
-        this.pic = pic;
-    }
-
-    public String getImgs() {
-        return imgs;
-    }
-
-    public void setImgs(String imgs) {
-        this.imgs = imgs;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public Long getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    public Integer getSoldNum() {
-        return soldNum;
-    }
-
-    public void setSoldNum(Integer soldNum) {
-        this.soldNum = soldNum;
-    }
-
-    public Integer getTotalStocks() {
-        return totalStocks;
-    }
-
-    public void setTotalStocks(Integer totalStocks) {
-        this.totalStocks = totalStocks;
-    }
-
-    public String getDeliveryMode() {
-        return deliveryMode;
-    }
-
-    public void setDeliveryMode(String deliveryMode) {
-        this.deliveryMode = deliveryMode;
-    }
-
-    public Long getDeliveryTemplateId() {
-        return deliveryTemplateId;
-    }
-
-    public void setDeliveryTemplateId(Long deliveryTemplateId) {
-        this.deliveryTemplateId = deliveryTemplateId;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public Date getPutawayTime() {
-        return putawayTime;
-    }
-
-    public void setPutawayTime(Date putawayTime) {
-        this.putawayTime = putawayTime;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
-
-    public List<Sku> getSkuList() {
-        return skuList;
-    }
-
-    public void setSkuList(List<Sku> skuList) {
-        this.skuList = skuList;
-    }
-
-    public String getShopName() {
-        return shopName;
-    }
-
-    public void setShopName(String shopName) {
-        this.shopName = shopName;
-    }
-
-    public List<Long> getTagList() {
-        return tagList;
-    }
-
-    public void setTagList(List<Long> tagList) {
-        this.tagList = tagList;
-    }
 }

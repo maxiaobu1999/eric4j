@@ -8,6 +8,8 @@ import com.eric.service.CategoryService;
 import com.eric.service.ProductService;
 import com.eric.service.SmsCodeService;
 import com.github.pagehelper.PageHelper;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -16,16 +18,36 @@ import javax.annotation.Resource;
 import java.util.List;
 
 @RestController // 相当于@ResponseBody和@Controller
-@RequestMapping(value = "/prod/category")// 配置url映射,一级
+@RequestMapping(value = "/category")// 配置url映射,一级
 @CrossOrigin(origins = "*")// 解决浏览器跨域问题(局部)
 @SuppressWarnings("Duplicates") // 去除代码重复警告
 public class CategoryController extends BaseController {
     private static final Logger logger = LoggerFactory.getLogger(CategoryController.class);
-    //
 //    @Resource
 //    private TokenManager mTokenManager;
     @Resource
     private CategoryService mService;
+
+
+    /**
+     * 分类信息列表接口
+     */
+    @RequestMapping(value = {"/categoryInfo"}, method = {RequestMethod.GET})
+    @Operation(summary = "分类信息列表" , description = "获取所有的产品分类信息，顶级分类的parentId为0,默认为顶级分类")
+    @Parameter(name = "parentId", description = "分类ID", required = false)
+    public BaseResponse<List<CategoryEntity>> categoryInfo(@RequestParam(value = "parentId", defaultValue = "0") Long parentId) {
+        BaseResponse<List<CategoryEntity>> responseEntity;
+        try {
+            logger.info("categoryInfo" + ",parentId:" + parentId);
+            List<CategoryEntity> data = mService.listByParentId(parentId);
+            responseEntity =  BaseResponse.success(data);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseEntity = new BaseResponse<>(-1, "error : "+e.getMessage());
+        }
+        return responseEntity;
+    }
+
 
     /**
      * 获取信息
@@ -86,7 +108,7 @@ public class CategoryController extends BaseController {
     }
 
     /**
-     * 新品推荐
+     * 首页产品分类
      */
     @RequestMapping(value = {"/range"}, method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
     public BaseResponse<List<CategoryEntity>> selectRange() {

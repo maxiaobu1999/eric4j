@@ -72,7 +72,7 @@ public class KickoutSessionFilter extends AccessControlFilter
             Session session = subject.getSession();
             // 当前登录用户
             UserEntity user = ShiroUtils.getSysUser();
-            String loginName = user.getUserName();
+            String loginName = user.getNickName();
             Serializable sessionId = session.getId();
 
             // 读取缓存用户 没有就存入

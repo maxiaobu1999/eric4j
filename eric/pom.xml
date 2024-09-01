@@ -87,8 +87,11 @@
             <artifactId>pagehelper-spring-boot-starter</artifactId>
         </dependency>
 
-
-
+        <!-- 这个库用于提供集合，缓存，支持原语句，并发性，常见注解，字符串处理，I/O和验证的实用方法。 -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

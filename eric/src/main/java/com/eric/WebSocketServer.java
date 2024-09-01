@@ -67,7 +67,7 @@ public class WebSocketServer {
         addOnlineCount();           //在线数加1
         try {
             UserEntity userEntity = userService.findByUserId(Long.parseLong(token));
-            logger.info("++++" + token + ",当前在线人数为:" + userEntity.userName);
+            logger.info("++++" + token + ",当前在线人数为:" + userEntity.getNickName());
 
             applicationContext.getBean(UserService.class);
         } catch (Exception e) {

@@ -20,36 +20,35 @@ public interface IUserDao {
      *
      * @param item 用户信息
      */
-//    @Insert("INSERT INTO user(userId,phoneNum,userName,password," + "avatar," + "nickname)" +
-    @Insert("INSERT INTO user(userId,phoneNum,userName,password,avatar,nickName,token,salt)" +
-            "values(#{userId},#{phoneNum},#{userName},#{password}" + ",#{avatar}" + ",#{nickName},#{token},#{salt})")
+    @Insert("INSERT INTO tz_user(user_id,nick_name,real_name,user_mail,login_password,pay_password,user_mobile,modify_time,user_regtime,sex,birth_date,pic,score,salt)" +
+            "values(#{userId},#{nickName},#{realName},#{userMail},#{loginPassword},#{payPassword},#{userMobile},#{modifyTime},#{userRegtime},#{sex},#{birthDate},#{pic},#{score},#{salt})")
     int insertItem(UserEntity item);
 
-    @Select("SELECT * FROM user ")
+    @Select("SELECT * FROM tz_user ")
     ArrayList<UserEntity> queryAllUser();
 
     /**
      * 根据userId获取查询用户信息
      */
-    @Select("SELECT * FROM user where userId=#{userId} ")
+    @Select("SELECT * FROM tz_user where user_id=#{userId} ")
     List<UserEntity> queryByUserId(Long userId);
 
     /**
      * 根据userId获取删除用户信息
      */
-    @Delete("delete from user where userId=#{userId} ")
+    @Delete("delete from tz_user where userId=#{userId} ")
     void deleteByUserId(Long userId);
     /**
      * 根据username获取查询用户信息
      */
-    @Select("SELECT * FROM user where userName=#{userName} ")
-    List<UserEntity> queryByUsername(String userName);
+    @Select("SELECT * FROM tz_user where real_name=#{realName} ")
+    List<UserEntity> queryByName(String realName);
 
 
     /**
      * 根据userId更新
      */
-    @Update("update user set phoneNum=#{phoneNum}," + "userName=#{userName}," + "password=#{password}," +
+    @Update("update tz_user set phoneNum=#{phoneNum}," + "userName=#{userName}," + "password=#{password}," +
             "avatar=#{avatar}," + "nickName=#{nickName}," + "token=#{token} where userId=#{userId}")
     void updateByUserId(UserEntity user);
 
@@ -57,7 +56,7 @@ public interface IUserDao {
     /**
      * 根据 phoneNum 获取查询用户信息
      */
-    @Select("SELECT * FROM user where phoneNum=#{phoneNum} ")
+    @Select("SELECT * FROM tz_user where phoneNum=#{phoneNum} ")
     List<UserEntity> findByphoneNum(String phoneNum);
 
 

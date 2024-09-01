@@ -23,7 +23,7 @@ public interface UserService {
     /**
      * 查找账户，userName
      */
-    UserEntity findByUserName(String userName);
+    UserEntity findByName(String userName);
 
     /**
      * @return 全部用户列表

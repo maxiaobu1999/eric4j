@@ -16,6 +16,13 @@ public interface ISkuDao {
      * 商品的SKU列表
      * prodId 商品id
      */
-    @Select("SELECT * FROM tz_sku where prod_id=#{prodId} ")
+    @Select("SELECT * FROM tz_sku where prod_id=#{prodId} AND is_delete=0 AND status=1")
     List<Sku> listByProdId(Long prodId);
+
+    /**
+     * 商品的SKU列表
+     * prodId 商品id
+     */
+    @Select("SELECT * FROM tz_sku where sku_id=#{skuId} ")
+    Sku selectById(Long skuId);
 }

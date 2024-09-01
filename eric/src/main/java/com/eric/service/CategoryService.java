@@ -9,6 +9,15 @@ import java.util.List;
  * 商品类别
  */
 public interface CategoryService {
+
+
+    /**
+     * 根据parentId获取分类
+     * @param parentId 0 一级分类
+     */
+    List<CategoryEntity> listByParentId(Long parentId);
+
+
     /**
      * 根据商品id获取商品信息
      *

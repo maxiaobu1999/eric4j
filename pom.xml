@@ -40,6 +40,7 @@
         <velocity.version>2.3</velocity.version>
         <jackson.version>2.16.0</jackson.version>
         <mybatis-plus.version>3.5.5</mybatis-plus.version>
+        <guava.version>33.0.0-jre</guava.version>
     </properties>
 
     <dependencyManagement>
@@ -168,6 +169,13 @@
                 <artifactId>pagehelper-spring-boot-starter</artifactId>
                 <version>${pagehelper.boot.version}</version>
             </dependency>
+
+            <!-- 这个库用于提供集合，缓存，支持原语句，并发性，常见注解，字符串处理，I/O和验证的实用方法。 -->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <dependencies>
@@ -178,6 +186,8 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
+
+
 <!--    <build>-->
 <!--        <plugins>-->
 <!--            <plugin>-->

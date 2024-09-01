@@ -18,9 +18,11 @@ public interface IAdvertisementDao {
     /**
      * 根据userId获取查询用户信息
      */
-    @Select("SELECT * FROM advertisement ")
+    @Select("SELECT * FROM tpl_advertisement ")
     @Results({
-            @Result(id=true,property="imageUrl",column="image_url"),
+            @Result(id=true,property="name",column="advert_name"),
+            @Result(id=true,property="description",column="advert_desc"),
+            @Result(id=true,property="imageUrl",column="advert_images"),
             @Result(property="url",column="url")
     })
     List<AdvertisementEntity> selectAll();

@@ -102,8 +102,6 @@ public class JwtUtils {
         return builder.sign(algorithm);
     }
 
-
-
     @Autowired
     public void setRedisUtils(RedisUtils redisUtils) {
         JwtUtils.redisUtils = redisUtils;

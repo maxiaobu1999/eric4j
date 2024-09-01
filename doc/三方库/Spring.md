@@ -30,7 +30,7 @@ AOP —— Aspect Oriented Programming
 ### 实现原理
 
 运行时注解，反射，黄油刀getAnnotation找注解，读注解findViewById，反射给view赋值
-编译时注解，Processor process()加字符串
+编译时注解，APT工具 ， 继承AbstractProcessor 实现process()生成java 文件
 tip：
 元注解，注解使用的注解
 @Target 可修饰的对象范围，@Retention解保留的时间范围，@Documented

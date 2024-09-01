@@ -200,7 +200,8 @@ session:
 
 
 jwt:
-  accessTokenExpireTime: 600000
+  # token过期时间
+  accessTokenExpireTime: 86400000
   # 1000*60*60*24 24\u4E2A\u5C0F\u65F6
   refreshTokenExpireTime: 86400000
   issuer: StarPay

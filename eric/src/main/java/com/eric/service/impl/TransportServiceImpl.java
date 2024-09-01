@@ -159,7 +159,7 @@ public class TransportServiceImpl  implements TransportService {
 
 
 	@Override
-	@Cacheable(cacheNames = "TransportAndAllItems", key = "#transportId")
+//	@Cacheable(cacheNames = "TransportAndAllItems", key = "#transportId")
 	public Transport getTransportAndAllItems(Long transportId) {
 		Transport transport = transportMapper.getTransportAndTransfeeAndTranscity(transportId);
 		if (transport == null) {

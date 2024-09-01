@@ -21,20 +21,20 @@ public interface IProductDao {
 
 
     @Select("SELECT * FROM tz_prod ")
-    @Results({
-            @Result(id=true,property="prodId",column="prod_id"),
-            @Result(property="oriPrice",column="ori_price")
-    })
+//    @Results({
+//            @Result(id=true,property="prodId",column="prod_id"),
+//            @Result(property="oriPrice",column="ori_price")
+//    })
     ArrayList<Product> selectAll();
 
 
 
     @Select("SELECT * FROM tz_prod WHERE  prod_id   BETWEEN #{param1}  AND #{param2}")
-    @Results({
-            @Result(id=true,property="prodId",column="prod_id"),
-            @Result(property="name",column="prod_name"),
-            @Result(property="oriPrice",column="ori_price")
-    })
+//    @Results({
+//            @Result(id=true,property="prodId",column="prod_id"),
+//            @Result(property="name",column="prod_name"),
+//            @Result(property="oriPrice",column="ori_price")
+//    })
     ArrayList<Product> selectRange(int start, int end);
 
 

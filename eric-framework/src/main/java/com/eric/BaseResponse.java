@@ -8,17 +8,31 @@ import java.io.Serializable;
 //@ApiModel
 public class BaseResponse<T> implements Serializable {
     public static <T> BaseResponse<T> success() {
-        BaseResponse<T> serverResponseEntity = new BaseResponse<>();
-        serverResponseEntity.setCode(0);
-        serverResponseEntity.setMsg("成功");
-        return serverResponseEntity;
+        BaseResponse<T> responseEntity = new BaseResponse<>();
+        responseEntity.setCode(0);
+        responseEntity.setMsg("成功");
+        return responseEntity;
     }
 
     public static <T> BaseResponse<T> success(T data) {
+        BaseResponse<T> responseEntity = new BaseResponse<>();
+        responseEntity.setCode(0);
+        responseEntity.setMsg("成功");
+        responseEntity.setData(data);
+        return responseEntity;
+    }
+    public static <T> BaseResponse<T> success1(T data) {
+        BaseResponse<T> responseEntity = new BaseResponse<>();
+        responseEntity.setCode(4010001);
+        responseEntity.setMsg("成功");
+        responseEntity.setData(data);
+        return responseEntity;
+    }
+
+    public static <T> BaseResponse<T> fail(String msg) {
         BaseResponse<T> serverResponseEntity = new BaseResponse<>();
-        serverResponseEntity.setCode(0);
-        serverResponseEntity.setMsg("成功");
-        serverResponseEntity.setData(data);
+        serverResponseEntity.setCode(1);
+        serverResponseEntity.setMsg(msg);
         return serverResponseEntity;
     }
 

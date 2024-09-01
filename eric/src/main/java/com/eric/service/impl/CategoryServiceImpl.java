@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.List;
 
 @Primary // 解决 expected single matching bean but found 2: accountServiceImpl,accountService
@@ -18,6 +19,13 @@ import java.util.List;
 public class CategoryServiceImpl implements CategoryService {
     @Resource
     private ICategoryDao mCategoryDao;
+
+    @Override
+    public List<CategoryEntity> listByParentId(Long parentId) {
+        List<CategoryEntity> list = mCategoryDao.listByParentId(parentId);
+        return list;
+    }
+
     @Override
     public CategoryEntity getItem(Long prodId) {
         List<CategoryEntity> list = mCategoryDao.selectItem(prodId);

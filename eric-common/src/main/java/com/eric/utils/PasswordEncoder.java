@@ -37,7 +37,6 @@ public class PasswordEncoder {
     public boolean matches(String encPass, String rawPass) {
         String pass1 = "" + encPass;
         String pass2 = encode(rawPass);
-        log.info("++++++++++++++++++ = " + pass2);
         return pass1.equals(pass2);
     }
 
