@@ -102,8 +102,8 @@ public class FileController {
         try {
             logger.info("uploadAvatar 文件类型是：" + type);
             String filePath;
-            if ("-dev".equals(env)) {
-                filePath = "D:/sources/avatar";
+            if ("dev".equals(env)) {
+                filePath = "D:/backend/sources/eric4j/";
             } else {
                 filePath = "/home/ecs-assist-user/eric/sources/avatar/";
             }

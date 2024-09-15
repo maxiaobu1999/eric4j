@@ -171,7 +171,7 @@ public class UserController extends BaseController {
             userEntity.setSalt(PasswordUtils.getSalt());
             userEntity.setLoginPassword(PasswordUtils.encode(password, userEntity.getSalt()));
 
-            userEntity.setUserId(String.valueOf(Util.createUserID()));
+            userEntity.setUserId(String.valueOf(Util.createID()));
             int res = mUserService.insertAccount(userEntity);
             logger.info("registerByUsername=="+res);
 
@@ -398,7 +398,7 @@ public class UserController extends BaseController {
             // 插入用户信息
             UserEntity userEntity = new UserEntity();
             userEntity.setUserMobile(phoneNum);
-            userEntity.setUserId(String.valueOf(Util.createUserID()));
+            userEntity.setUserId(String.valueOf(Util.createID()));
             userEntity.setNickName(userEntity.getUserId());
             mUserService.insertAccount(userEntity);
 

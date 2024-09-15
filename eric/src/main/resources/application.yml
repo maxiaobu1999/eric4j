@@ -120,17 +120,17 @@ spring:
       # 热部署开关
       enabled: true
   redis:
-    database: 0   #redis的0号数据库
+    database: 1   #redis的0号数据库
     host: 106.14.58.169
     port: 6379
     password: 123456
-    timeout: 600000 #连接超时时间600毫秒
-    lettuce:
-      pool:
-        max-active: 60 #连接池最大连接数
-        max-wait: -1ms #连接池最大阻塞等待时间（使用负值表示没有限制）
-        min-idle: 1 #连接池中的最小空闲连接
-        max-idle: 8 #连接池中的最大空闲连接
+#    timeout: 600000 #连接超时时间600毫秒
+#    lettuce:
+#      pool:
+#        max-active: 60 #连接池最大连接数
+#        max-wait: -1ms #连接池最大阻塞等待时间（使用负值表示没有限制）
+#        min-idle: 1 #连接池中的最小空闲连接
+#        max-idle: 8 #连接池中的最大空闲连接
   mvc:
     converters:
       preferred-json-mapper:fastjson
@@ -143,7 +143,6 @@ mybatis:
   # 配置mapper的扫描，找到所有的mapper.xml映射文件
   mapperLocations: classpath:mapper/*.xml
   #  mapperLocations: classpath*:mapper/**/*Mapper.xml
-
   # 加载全局的配置文件
   configLocation: classpath:mybatis/mybatis-config.xml
 
@@ -152,8 +151,6 @@ mybatis:
 swagger:
   # 是否开启swagger
   enabled: true
-
-
 
 # Shiro
 shiro:
@@ -208,6 +205,7 @@ jwt:
   secretKey: cdc4893a67fb48479763
 
 pagehelper:
-  reasonable: true  # 是否进行分页合理化
-  supportMethodsArguments: true  # 是否支持通过Mapper接口参数来传递分页参数
+  reasonable: false #分页合理化参数，为 true 时，pageNum<=0 会查询第一页， pageNum>pages（超过总数时），会查询最后一页。默认false 时，直接根据参数进行查询。
+  supportMethodsArguments: true  # 是否支持通过Mapper接口参数来传递分页参数，为 true 时，分页插件会从查询方法的参数值中查找 pageNum、pageSize 参数的值进行自动分页。默认值 false.
+  pageSizeZero: true #设置为 true 时，如果 pageSize=0 或者 RowBounds.limit = 0, 就会查询出全部的结果(相当于没有执行分页查询，但是返回结果仍然是 Page 类型),默认值为 false，
 

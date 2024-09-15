@@ -1,8 +1,8 @@
 package com.eric.service;
 
+import com.eric.repository.dto.SearchProdDto;
 import com.eric.repository.entity.Product;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,10 +22,24 @@ public interface ProductService {
      *
      * @return
      */
-    List<Product> SelectAll();
+    List<Product> selectAll();
 
     List<Product> selectRange(int start, int end);
 
 
 
+    /**
+     * 根据商品id删除缓存
+     * @param prodId
+     */
+    void removeProductCacheByProdId(Long prodId);
+    /**
+     * 根据商品名称模糊查询 搜索
+
+     * @param prodName
+     * @param sort
+     * @param orderBy
+     * @return
+     */
+    List<SearchProdDto> getSearchProdDtoPageByProdName(int current,int size, String prodName, int sort, int orderBy);
 }

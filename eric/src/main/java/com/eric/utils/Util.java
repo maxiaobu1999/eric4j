@@ -9,7 +9,7 @@ public class Util {
     static SnowFlow snowFlow = new SnowFlow(1, 1, 1000);
     static SnowFlow snowFlowMsg = new SnowFlow(2, 1, 1000);
 
-    public static long createUserID() {
+    public static long createID() {
         return snowFlow.nextId();
     }
     public static long createMessageID() {

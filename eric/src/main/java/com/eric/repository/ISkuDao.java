@@ -1,5 +1,6 @@
 package com.eric.repository;
 
+import com.eric.repository.entity.ShopDetail;
 import com.eric.repository.entity.Sku;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
@@ -25,4 +26,11 @@ public interface ISkuDao {
      */
     @Select("SELECT * FROM tz_sku where sku_id=#{skuId} ")
     Sku selectById(Long skuId);
+
+
+    @Update("update tz_sku set " +
+            "stocks=stocks - #{stocks}," + "version=version + 1," + "update_time=NOW()" +
+            "where sku_id=#{skuId} AND #{stocks} <= stocks")
+    int updateStocks(Sku sku);
+
 }

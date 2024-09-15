@@ -1,7 +1,10 @@
 package com.eric.repository;
 
 import com.eric.core.domain.entity.UserEntity;
+import com.eric.core.page.PageParam;
+import com.eric.repository.dto.SearchProdDto;
 import com.eric.repository.entity.Product;
+import com.eric.repository.entity.Sku;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
@@ -21,69 +24,55 @@ public interface IProductDao {
 
 
     @Select("SELECT * FROM tz_prod ")
-//    @Results({
-//            @Result(id=true,property="prodId",column="prod_id"),
-//            @Result(property="oriPrice",column="ori_price")
-//    })
     ArrayList<Product> selectAll();
 
 
-
     @Select("SELECT * FROM tz_prod WHERE  prod_id   BETWEEN #{param1}  AND #{param2}")
-//    @Results({
-//            @Result(id=true,property="prodId",column="prod_id"),
-//            @Result(property="name",column="prod_name"),
-//            @Result(property="oriPrice",column="ori_price")
-//    })
     ArrayList<Product> selectRange(int start, int end);
 
-
-
-
-
-
-
+    @Update("update tz_prod set " +
+            "total_stocks=total_stocks - #{totalStocks}," + "version=version + 1 " +
+            "where prod_id=#{prodId} AND #{totalStocks} <= total_stocks")
+    int updateStocks(Product product);
 
     /**
-     * 增加一条
+     * 根据商品名称和排序分页获取商品
      *
-     * @param item 用户信息
+     * @param prodName
+     * @param sort
+     * @param orderBy 排序 orderBy sql语句冲突 改order
+     * @return
      */
-//    @Insert("INSERT INTO user(userId,phoneNum,userName,password," + "avatar," + "nickname)" +
-    @Insert("INSERT INTO user(userId,phoneNum,userName,password,avatar,nickName,token,salt)" +
-            "values(#{userId},#{phoneNum},#{userName},#{password}" + ",#{avatar}" + ",#{nickName},#{token},#{salt})")
-    int insertItem(UserEntity item);
+    @Select({
+            "<script>",
+            "SELECT  p.prod_id, p.pic,p.prod_name,p.price ,count(pc.prod_comm_id) as prod_comm_number FROM tz_prod p ",
+            "LEFT JOIN tz_prod_comm pc ON  p.prod_id=pc.prod_id AND  pc.status=1 ",
+            "WHERE prod_name LIKE CONCAT('%',#{prodName} ,'%')GROUP BY p.prod_id ",
+            "<if test='sort == 0'> ",
+            "ORDER BY p.update_time ",
+            "</if> ",
 
-    @Select("SELECT * FROM user ")
-    ArrayList<UserEntity> queryAllUser();
+            "<if test='sort == 1'> ",
+            "ORDER BY p.sold_num ",
+            "</if> ",
 
+            "<if test='sort == 2'> ",
+            "ORDER BY p.price ",
+            "</if> ",
 
+            "<if test='order == 0'> ",
+            " ASC ",
+            "</if> ",
 
-    /**
-     * 根据userId获取删除用户信息
-     */
-    @Delete("delete from user where userId=#{userId} ")
-    void deleteByUserId(Long userId);
-    /**
-     * 根据username获取查询用户信息
-     */
-    @Select("SELECT * FROM user where userName=#{userName} ")
-    List<UserEntity> queryByUsername(String userName);
-
-
-    /**
-     * 根据userId更新
-     */
-    @Update("update user set phoneNum=#{phoneNum}," + "userName=#{userName}," + "password=#{password}," +
-            "avatar=#{avatar}," + "nickName=#{nickName}," + "token=#{token} where userId=#{userId}")
-    void updateByUserId(UserEntity user);
-
-
-    /**
-     * 根据 phoneNum 获取查询用户信息
-     */
-    @Select("SELECT * FROM user where phoneNum=#{phoneNum} ")
-    List<UserEntity> findByphoneNum(String phoneNum);
+            "<if test='order == 1'> ",
+            " DESC ",
+            "</if> ",
+            "</script>"
+    })
+    List<SearchProdDto> getSearchProdDtoPageByProdName(int current, int size, @Param("prodName") String prodName, @Param("sort") int sort,@Param("order") int orderBy);
+//    @Select("SELECT p.prod_id, p.pic,p.prod_name,p.price,count(pc.prod_comm_id) as prod_comm_number FROM tz_prod p " +
+//            "LEFT JOIN tz_prod_comm pc ON  p.prod_id=pc.prod_id AND  pc.`status`=1 " +
+//            "where prod_name like concat('%',#{prodName} ,'%') GROUP BY p.prod_id ")
 
 
 }

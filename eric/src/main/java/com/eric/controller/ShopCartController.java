@@ -34,6 +34,7 @@ import java.util.Objects;
 @SuppressWarnings("Duplicates") // 去除代码重复警告
 public class ShopCartController extends BaseController {
     private static final Logger logger = LoggerFactory.getLogger(ShopCartController.class);
+
     @Resource
     private BasketService mBasketService;
     @Resource
@@ -88,7 +89,7 @@ public class ShopCartController extends BaseController {
     public BaseResponse<String> changeItem(HttpServletRequest request, @Valid @RequestBody ChangeShopCartParam param) {
         BaseResponse<String> responseEntity;
         try {
-            logger.info("changeItem" + ",parentId:" + param);
+            logger.info("changeItem" + ",param:" + param);
             String token = request.getHeader(Constant.ACCESS_TOKEN);
             String userId = String.valueOf(JwtUtils.getUserId(token));
             logger.info("changeItem" + ",userId:" + userId);

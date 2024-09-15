@@ -161,7 +161,11 @@ public class TransportServiceImpl  implements TransportService {
 	@Override
 //	@Cacheable(cacheNames = "TransportAndAllItems", key = "#transportId")
 	public Transport getTransportAndAllItems(Long transportId) {
-		Transport transport = transportMapper.getTransportAndTransfeeAndTranscity(transportId);
+		List<Transport> transports = transportMapper.getTransportAndTransfeeAndTranscity(transportId);
+		if (transports.isEmpty()) {
+			return null;
+		}
+		Transport transport= transports.get(0);
 		if (transport == null) {
 			return null;
 		}

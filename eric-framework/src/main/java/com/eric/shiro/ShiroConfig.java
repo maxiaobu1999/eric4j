@@ -187,6 +187,8 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/sku/**", "anon");
         filterChainDefinitionMap.put("/websocket/**", "anon");
         filterChainDefinitionMap.put("/chat/**", "anon");
+        filterChainDefinitionMap.put("/upload/**", "anon");
+        filterChainDefinitionMap.put("/search/**", "anon");
 
 
 

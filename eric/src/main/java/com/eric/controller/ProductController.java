@@ -10,7 +10,6 @@ import com.eric.repository.entity.TestEntity;
 import com.eric.repository.entity.Transport;
 import com.eric.service.ProductService;
 import com.eric.service.SkuService;
-import com.eric.service.SmsCodeService;
 import com.eric.service.TransportService;
 import com.eric.utils.Json;
 import com.github.pagehelper.PageHelper;
@@ -18,8 +17,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -39,7 +36,7 @@ public class ProductController extends BaseController {
     private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 
     @Resource
-    private ProductService mService;
+    private ProductService mProductService;
     @Resource
     private SkuService mSkuService;
     @Resource
@@ -56,7 +53,7 @@ public class ProductController extends BaseController {
         BaseResponse<ProductDto> responseEntity;
         try {
             logger.info("info" + ",prodId:" + prodId);
-            Product product = mService.getItem(prodId);
+            Product product = mProductService.getItem(prodId);
             if (product == null) {
                 return BaseResponse.success();
             }
@@ -91,7 +88,7 @@ public class ProductController extends BaseController {
         try {
             logger.info("page" + ",pageNum:" + pageNum);
             PageHelper.startPage(pageNum, pageSize);
-            List<Product> list = mService.SelectAll();
+            List<Product> list = mProductService.selectAll();
             responseEntity = new BaseResponse<>(0, "成功");
             responseEntity.setData(list);
         } catch (Exception e) {
@@ -111,7 +108,7 @@ public class ProductController extends BaseController {
         BaseResponse<List<Product>> responseEntity;
         try {
             logger.info("newProd");
-            List<Product> list = mService.selectRange(100, 105);
+            List<Product> list = mProductService.selectRange(100, 105);
             responseEntity = new BaseResponse<>(0, "成功");
             responseEntity.setData(list);
         } catch (Exception e) {

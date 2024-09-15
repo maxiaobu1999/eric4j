@@ -1,13 +1,14 @@
 package com.eric.repository.entity;
 
+import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @author lanhai
  */
+@Data
 public class Sku implements Serializable {
     /**
      * 单品ID

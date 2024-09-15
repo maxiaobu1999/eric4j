@@ -32,9 +32,9 @@ public interface ITransportDao {
     @Select("SELECT port.*,fee.*,city.*,ta.*  FROM tz_transport port " +
             "LEFT JOIN tz_transfee fee ON port.transport_id = fee.transport_id " +
             "LEFT JOIN tz_transcity city  ON  fee.transfee_id = city.transfee_id " +
-            "LEFT JOIN  tz_area ta   ON  city.city_id = ta.area_id " +
+            "LEFT JOIN  tz_area ta ON city.city_id = ta.area_id " +
             "WHERE port.transport_id = #{id}  order by fee.transfee_id")
-    Transport getTransportAndTransfeeAndTranscity(Long id);
+    List<Transport> getTransportAndTransfeeAndTranscity(Long id);
 
     /**
      * 根据运费模板id删除运费模板
