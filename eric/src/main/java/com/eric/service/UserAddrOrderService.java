@@ -15,7 +15,7 @@ public interface UserAddrOrderService {
 	void save(UserAddrOrder userAddrOrder);
 
 
-	UserAddrOrder getById(Long orderNumber);
+	UserAddrOrder getById(Long addrOrderId);
 
 }
 

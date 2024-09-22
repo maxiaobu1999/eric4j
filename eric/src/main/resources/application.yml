@@ -124,7 +124,7 @@ spring:
     host: 106.14.58.169
     port: 6379
     password: 123456
-#    timeout: 600000 #连接超时时间600毫秒
+    timeout: 1500 #连接超时时间1500毫秒
 #    lettuce:
 #      pool:
 #        max-active: 60 #连接池最大连接数
@@ -190,6 +190,8 @@ shiro:
   rememberMe:
     # 是否开启记住我
     enabled: false
+
+
 session:
   redis:
     inMemoryTimeout: 600 #session-Redis保存在内存中的超时时间(秒)，默认值 600
@@ -197,10 +199,10 @@ session:
 
 
 jwt:
-  # token过期时间
-  accessTokenExpireTime: 86400000
+  # token过期时间 毫秒
+  accessTokenExpireTime: 60000000
   # 1000*60*60*24 24\u4E2A\u5C0F\u65F6
-  refreshTokenExpireTime: 86400000
+  refreshTokenExpireTime: 60000000
   issuer: StarPay
   secretKey: cdc4893a67fb48479763
 

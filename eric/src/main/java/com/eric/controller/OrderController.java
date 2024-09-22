@@ -5,6 +5,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.eric.BaseResponse;
 import com.eric.constant.Constant;
+import com.eric.event.ConfirmOrderEvent;
 import com.eric.exception.base.BaseException;
 import com.eric.jwt.JwtUtils;
 import com.eric.repository.dto.*;
@@ -23,6 +24,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Operation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -50,7 +53,8 @@ public class OrderController extends BaseController {
     private BasketService mBasketService;
     @Resource
     private OrderService mOrderService;
-
+    @Resource
+    private ApplicationContext applicationContext;
     /**
      * 生成订单
      */
@@ -107,8 +111,8 @@ public class OrderController extends BaseController {
             }
 
             shopCartOrder.setShopCartItemDiscounts(shopCartItemDiscounts);
-//
-//            applicationContext.publishEvent(new ConfirmOrderEvent(shopCartOrder,orderParam,shopAllShopCartItems));
+
+            applicationContext.publishEvent(new ConfirmOrderEvent(shopCartOrder,orderParam,shopAllShopCartItems));
             // 计算订单金额
             calActual(shopCartOrder, orderParam, shopAllShopCartItems, userId);
 

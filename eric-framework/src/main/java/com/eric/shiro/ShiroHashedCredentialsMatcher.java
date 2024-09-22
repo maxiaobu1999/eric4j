@@ -9,6 +9,7 @@ import com.eric.redis.RedisUtils;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.springframework.dao.QueryTimeoutException;
 
 import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
@@ -42,9 +43,17 @@ public class ShiroHashedCredentialsMatcher extends HashedCredentialsMatcher {
          * 否：下一步。
          * 是：引导到登录界面。
          */
-        if (redisUtils.hasKey(Constant.ACCOUNT_LOCK_KEY + userId)) {
-            throw new BusinessException(BaseResponse1.ACCOUNT_LOCK);
+        try{
+            if (redisUtils.hasKey(Constant.ACCOUNT_LOCK_KEY + userId)) {
+                throw new BusinessException(BaseResponse1.ACCOUNT_LOCK);
+            }
+        }catch (QueryTimeoutException e){
+            e.printStackTrace();
+            if (redisUtils.hasKey(Constant.ACCOUNT_LOCK_KEY + userId)) {
+                throw new BusinessException(BaseResponse1.ACCOUNT_LOCK);
+            }
         }
+
         /*
          * 第二步：判断用户是否被删除。
          * 否：下一步。

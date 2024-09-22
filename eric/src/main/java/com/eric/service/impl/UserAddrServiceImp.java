@@ -45,7 +45,7 @@ public class UserAddrServiceImp implements UserAddrService {
 	}
 
 	@Override
-//	@Cacheable(cacheNames = "UserAddrDto", key = "#userId+':'+#addrId")
+	@Cacheable(cacheNames = "UserAddrDto", key = "#userId+':'+#addrId")
 	public UserAddr getUserAddrByUserId(Long addrId, String userId) {
 		if (addrId == 0) {
 			return mUserAddrDao.getDefaultUserAddr(userId);

@@ -35,4 +35,5 @@ public class ShopCartItemDto extends ProductItemDto implements Serializable {
 
     @Schema(description = "加入购物车的时间" )
     private Date basketDate;
+
 }

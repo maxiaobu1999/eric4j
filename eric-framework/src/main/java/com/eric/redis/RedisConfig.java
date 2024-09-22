@@ -6,12 +6,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.data.redis.serializer.*;
+
+import javax.annotation.Resource;
 
 /**
  * 操作redis数据库
@@ -20,6 +22,8 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 public class RedisConfig {
     private static final Logger logger = LoggerFactory.getLogger(RedisConfig.class);
+    @Resource
+    private RedisConnectionFactory redisConnectionFactory;
 
     @Bean(name = "jsonRedisTemplate")
     public RedisTemplate<String, String> jsonRedisTemplate(RedisConnectionFactory connectionFactory) {
@@ -46,6 +50,31 @@ public class RedisConfig {
         template.setHashKeySerializer(new StringRedisSerializer());
         template.setHashValueSerializer(serializer);
         template.afterPropertiesSet();
+        return template;
+    }
+    @Bean
+    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+        RedisTemplate<String, Object> template = new RedisTemplate<>();
+        template.setConnectionFactory(redisConnectionFactory);
+        template.setKeySerializer(RedisSerializer.string());
+        template.setHashKeySerializer(RedisSerializer.string());
+        template.setDefaultSerializer(new GenericJackson2JsonRedisSerializer());
+        return template;
+    }
+    @Bean
+    @ConditionalOnMissingBean()
+    public RedisTemplate<String, String> stringRedisTemplate() {
+        RedisTemplate<String, String> template = new RedisTemplate<>();
+        template.setConnectionFactory(redisConnectionFactory);
+        template.setDefaultSerializer(RedisSerializer.string());
+        return template;
+    }
+
+    @Bean
+    public RedisTemplate<String, byte[]> byteArrayRedisTemplate() {
+        RedisTemplate<String, byte[]> template = new RedisTemplate<>();
+        template.setConnectionFactory(redisConnectionFactory);
+        template.setDefaultSerializer(new JdkSerializationRedisSerializer());
         return template;
     }
 

@@ -40,23 +40,11 @@ public class SubmitOrderListener {
     private static final Logger logger = LoggerFactory.getLogger(SubmitOrderListener.class);
 
     private final UserAddrOrderService userAddrOrderService;
-
     private final ProductService productService;
-
     private final SkuService skuService;
-
-//    private final Snowflake snowflake;
-//
-//    private final OrderItemMapper orderItemMapper;
-//
     private final ISkuDao skuMapper;
-//
     private final IProductDao productMapper;
-//
-//    private final OrderMapper orderMapper;
-//
     private final IOrderSettlementDao orderSettlementMapper;
-//
     private final IBasketDao basketMapper;
 
     /**

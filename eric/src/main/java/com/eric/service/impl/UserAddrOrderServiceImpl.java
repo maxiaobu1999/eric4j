@@ -21,7 +21,7 @@ public class UserAddrOrderServiceImpl implements UserAddrOrderService {
     }
 
     @Override
-    public UserAddrOrder getById(Long orderNumber) {
-        return mUserAddrOrderDao.getById(orderNumber);
+    public UserAddrOrder getById(Long addrOrderId) {
+        return mUserAddrOrderDao.getById(addrOrderId);
     }
 }

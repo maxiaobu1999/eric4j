@@ -2,6 +2,7 @@ package com.eric.shiro.realm;
 
 
 import com.auth0.jwt.interfaces.Claim;
+import com.eric.constant.Constant;
 import com.eric.core.domain.entity.UserEntity;
 import com.eric.jwt.JwtUtils;
 import com.eric.redis.RedisUtils;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * shiro 数据源
@@ -69,7 +71,7 @@ public class ShiroRealm extends AuthorizingRealm {
         /*
          * 通过剩余的过期时间比较如果token的剩余过期时间大与标记key的剩余过期时间
          * 就说明这个token是在这个标记key之后生成的
-//         */
+         */
 //        if (redisUtils.hasKey(Constant.JWT_REFRESH_KEY + userId) && redisUtils.getExpire(Constant.JWT_REFRESH_KEY + userId, TimeUnit.MILLISECONDS) > JwtUtils.getRemainingTime(accessToken)) {
 //            //返回该用户的 角色信息 给授权器
 //            List<String> roleNames = roleService.getRoleNamesByUserId(userId);
