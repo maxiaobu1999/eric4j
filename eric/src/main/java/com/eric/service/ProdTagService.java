@@ -17,8 +17,12 @@ public interface ProdTagService {
      * @return
      */
     List<ProdTag> listProdTag();
+    List<ProdTag> list(ProdTag prodTag);
 
-    public ProdTag getItem(Long prodId);
+    public ProdTag getItem(Long id);
+    public int removeById(Long id);
+    public boolean save(ProdTag prodTag);
+    public boolean updateById(ProdTag prodTag);
 
     /**
      * 删除商品分组标签缓存

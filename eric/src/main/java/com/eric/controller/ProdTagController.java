@@ -1,20 +1,26 @@
 package com.eric.controller;
 
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.eric.BaseResponse;
+import com.eric.constant.Constant;
+import com.eric.jwt.JwtUtils;
 import com.eric.repository.entity.ProdTag;
 import com.eric.service.ProdTagService;
+import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 商品分组
  *
- * @author hzm
- * @date 2019-04-18 09:08:36
  */
 @RestController
 @CrossOrigin(origins = "*")// 解决浏览器跨域问题(局部)
@@ -25,24 +31,20 @@ public class ProdTagController {
     @Resource
     private ProdTagService mProdTagService;
 
-//    /**
-//     * 分页查询
-//     *
-//     * @param page    分页对象
-//     * @param prodTag 商品分组标签
-//     * @return 分页数据
-//     */
-//    @GetMapping("/page")
-//    public ServerResponseEntity<IPage<ProdTag>> getProdTagPage(PageParam<ProdTag> page, ProdTag prodTag) {
-//        IPage<ProdTag> tagPage = prodTagService.page(
-//                page, new LambdaQueryWrapper<ProdTag>()
-//                        .eq(prodTag.getStatus() != null, ProdTag::getStatus, prodTag.getStatus())
-//                        .like(prodTag.getTitle() != null, ProdTag::getTitle, prodTag.getTitle())
-//                        .orderByDesc(ProdTag::getSeq, ProdTag::getCreateTime));
-//        return ServerResponseEntity.success(tagPage);
-//
-//    }
-//
+    /**
+     * 分页查询
+     *
+     * @param prodTag 商品分组标签
+     * @return 分页数据
+     */
+    @GetMapping("/page")
+    public BaseResponse<List<ProdTag>> getProdTagPage(int pageNum, int pageSize, ProdTag prodTag) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<ProdTag> tagPage = mProdTagService.listProdTag();
+        return BaseResponse.success(tagPage);
+
+    }
+
 
     /**
      * 通过id查询商品分组标签
@@ -65,69 +67,80 @@ public class ProdTagController {
         }
         return responseEntity;
     }
-//
-//    /**
-//     * 新增商品分组标签
-//     *
-//     * @param prodTag 商品分组标签
-//     * @return 是否新增成功
-//     */
+
+    /**
+     * 新增商品分组标签
+     *
+     * @param prodTag 商品分组标签
+     * @return 是否新增成功
+     */
 //    @SysLog("新增商品分组标签")
-//    @PostMapping
+    @PostMapping
 //    @PreAuthorize("@pms.hasPermission('prod:prodTag:save')")
-//    public ServerResponseEntity<Boolean> save(@RequestBody @Valid ProdTag prodTag) {
-//        // 查看是否相同的标签
-//        List<ProdTag> list = prodTagService.list(new LambdaQueryWrapper<ProdTag>().like(ProdTag::getTitle, prodTag.getTitle()));
-//        if (CollectionUtil.isNotEmpty(list)) {
-//            throw new YamiShopBindException("标签名称已存在，不能添加相同的标签");
-//        }
-//        prodTag.setIsDefault(0);
-//        prodTag.setProdCount(0L);
-//        prodTag.setCreateTime(new Date());
-//        prodTag.setUpdateTime(new Date());
-//        prodTag.setShopId(SecurityUtils.getSysUser().getShopId());
-//        prodTagService.removeProdTag();
-//        return ServerResponseEntity.success(prodTagService.save(prodTag));
-//    }
-//
-//    /**
-//     * 修改商品分组标签
-//     *
-//     * @param prodTag 商品分组标签
-//     * @return 是否修改成功
-//     */
+    public BaseResponse<Boolean> save(HttpServletRequest request,  @RequestBody @Valid ProdTag prodTag) {
+        // 查看是否相同的标签
+        List<ProdTag> list = mProdTagService.list(prodTag);
+        String token = request.getHeader(Constant.ACCESS_TOKEN);
+        String userId = String.valueOf(JwtUtils.getUserId(token));
+
+        if (CollectionUtil.isNotEmpty(list)) {
+            return BaseResponse.fail("标签名称已存在，不能添加相同的标签");
+        }
+        prodTag.setIsDefault(0);
+        prodTag.setProdCount(0L);
+        prodTag.setCreateTime(new Date());
+        prodTag.setUpdateTime(new Date());
+        prodTag.setShopId(1L);
+        mProdTagService.removeProdTag();
+        return BaseResponse.success(mProdTagService.save(prodTag));
+    }
+
+    /**
+     * 修改商品分组标签
+     *
+     * @param prodTag 商品分组标签
+     * @return 是否修改成功
+     */
 //    @SysLog("修改商品分组标签")
-//    @PutMapping
+    @PutMapping
 //    @PreAuthorize("@pms.hasPermission('prod:prodTag:update')")
-//    public ServerResponseEntity<Boolean> updateById(@RequestBody @Valid ProdTag prodTag) {
-//        prodTag.setUpdateTime(new Date());
-//        prodTagService.removeProdTag();
-//        return ServerResponseEntity.success(prodTagService.updateById(prodTag));
-//    }
-//
-//    /**
-//     * 通过id删除商品分组标签
-//     *
-//     * @param id id
-//     * @return 是否删除成功
-//     */
+    public BaseResponse<Boolean> updateById(@RequestBody @Valid ProdTag prodTag) {
+        prodTag.setUpdateTime(new Date());
+        mProdTagService.removeProdTag();
+        return BaseResponse.success(mProdTagService.updateById(prodTag));
+    }
+
+    /**
+     * 通过id删除商品分组标签
+     *
+     * @param id id
+     * @return 是否删除成功
+     */
 //    @SysLog("删除商品分组标签")
-//    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}")
 //    @PreAuthorize("@pms.hasPermission('prod:prodTag:delete')")
-//    public ServerResponseEntity<Boolean> removeById(@PathVariable Long id) {
-//        ProdTag prodTag = prodTagService.getById(id);
-//        if (prodTag.getIsDefault() != 0) {
-//            throw new YamiShopBindException("默认标签不能删除");
-//        }
-//        prodTagService.removeProdTag();
-//        return ServerResponseEntity.success(prodTagService.removeById(id));
-//    }
-//
-//    @GetMapping("/listTagList")
-//    public ServerResponseEntity<List<ProdTag>> listTagList() {
-//        return ServerResponseEntity.success(prodTagService.listProdTag());
-//
-//    }
+    public BaseResponse<Boolean> removeById(@PathVariable Long id) {
+        ProdTag prodTag = mProdTagService.getItem(id);
+        if (prodTag.getIsDefault() != 0) {
+            return BaseResponse.fail("默认标签不能删除");
+        }
+        mProdTagService.removeProdTag();
+        mProdTagService.removeById(id);
+        return BaseResponse.success();
+    }
+
+    @GetMapping("/listTagList")
+    public BaseResponse<List<ProdTag>> listTagList() {
+        log.info("listTagList:");
+        BaseResponse<ProdTag> responseEntity;
+        try {
+            List<ProdTag> prodTags = mProdTagService.listProdTag();
+            return  BaseResponse.success(prodTags);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return BaseResponse.fail(e.getMessage());
+        }
+    }
 
 
 }

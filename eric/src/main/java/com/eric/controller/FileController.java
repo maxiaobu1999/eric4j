@@ -1,6 +1,7 @@
 package com.eric.controller;
 
 import com.eric.BaseResponse;
+import io.swagger.v3.oas.annotations.Operation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
+@CrossOrigin(origins = "*")// 解决浏览器跨域问题(局部)
 @RestController // 相当于@ResponseBody和@Controller
 @RequestMapping(value = "/upload")// 配置url映射,一级
 public class FileController {
@@ -29,7 +31,7 @@ public class FileController {
             logger.info("上传" + ",file.getContentType():" + file.getContentType());
             logger.info("上传" + ",password:" + password);
             String filePath;
-            if ("-dev".equals(env)) {
+            if ("dev".equals(env)) {
                 filePath = "D:/sources/test";
             } else {
                 filePath = "/home/ecs-assist-user/eric/sources/test/";
@@ -57,6 +59,42 @@ public class FileController {
         return responseEntity;
     }
 
+    @PostMapping("/prod")
+    public BaseResponse<String> uploadProd(@RequestParam(value = "file") MultipartFile file) {
+        try {
+            logger.info("uploadProd：" + "=--=uploadAvatar 文件类型是：");
+            logger.info("uploadProd：" +"上传" + ",file:" + file.getName());
+            logger.info("uploadProd：" +"上传" + ",file.getSize():" + file.getSize());
+            logger.info("uploadProd：" +"上传" + ",file.getOriginalFilename():" + file.getOriginalFilename());
+            logger.info("uploadProd：" +"上传" + ",file.getContentType():" + file.getContentType());
+            String filePath;
+            if ("dev".equals(env)) {
+                filePath = "D:/backend/sources/eric4j/mall/prod";
+            } else {
+                filePath = "/home/ecs-assist-user/eric/sources/eric4j/mall/prod";
+            }
+            String fileName = file.getOriginalFilename();
+            //获取文件
+            File uploadParentFile = new File(filePath);
+            //判断文件目录是否存在
+            if (!uploadParentFile.exists()) {
+                //如果不存在就创建文件夹
+                uploadParentFile.mkdirs();
+            }
+            File uploadFile = new File(filePath + "/" + fileName);
+            //将临时文件转存到指定磁盘位置
+            try {
+                file.transferTo(uploadFile);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            return BaseResponse.success("mall/prod/" + uploadFile.getName());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return BaseResponse.fail(e.getMessage());
+        }
+    }
+
     // http://10.88.27.192:8089/source/avatar/
     @PostMapping("/avatar")
     public BaseResponse<String> uploadAvatar(@RequestPart MultipartFile file, @RequestParam String type) {
@@ -64,7 +102,7 @@ public class FileController {
         try {
             logger.info("uploadAvatar 文件类型是：" + type);
             String filePath;
-            if ("-dev".equals(env)) {
+            if ("dev".equals(env)) {
                 filePath = "D:/sources/avatar";
             } else {
                 filePath = "/home/ecs-assist-user/eric/sources/avatar/";

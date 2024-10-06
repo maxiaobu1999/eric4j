@@ -42,4 +42,12 @@ public interface ProductService {
      * @return
      */
     List<SearchProdDto> getSearchProdDtoPageByProdName(int current,int size, String prodName, int sort, int orderBy);
+
+
+    /**
+     * 保存商品
+     *
+     * @param product 商品信息
+     */
+    void saveProduct(Product product);
 }

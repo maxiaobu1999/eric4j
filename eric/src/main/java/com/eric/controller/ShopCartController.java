@@ -58,13 +58,14 @@ public class ShopCartController extends BaseController {
             mBasketService.updateBasketByShopCartParam(userId, basketIdShopCartParamMap);
         }
 
+
         // 拿到购物车的所有item
         List<ShopCartItemDto> shopCartItems = mBasketService.getShopCartItems(userId);
         List<ShopCartDto> res = mBasketService.getShopCarts(shopCartItems);
         return BaseResponse.success(res);
     }
 
-    @DeleteMapping("/deleteItem")
+    @PostMapping("/deleteItem")
 //    @RequestMapping(value = {"/deleteItem"}, method = {RequestMethod.POST})
     @Operation(summary = "删除用户购物车物品" , description = "通过购物车id删除用户购物车物品")
     public BaseResponse<Void> deleteItem(HttpServletRequest request, @RequestBody List<Long> basketIds) {

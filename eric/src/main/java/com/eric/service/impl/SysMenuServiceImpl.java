@@ -29,7 +29,7 @@ public class SysMenuServiceImpl implements SysMenuService {
     private SysMenuDao mSysMenuDao;
 
     @Override
-    public List<SysMenu> listMenuByUserId(Long userId) {
+    public List<SysMenu> listMenuByUserId(String userId) {
         // 用户的所有菜单信息
         List<SysMenu> sysMenus;
         //系统管理员，拥有最高权限

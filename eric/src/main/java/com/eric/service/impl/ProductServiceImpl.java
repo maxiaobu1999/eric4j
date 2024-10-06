@@ -1,7 +1,10 @@
 package com.eric.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.eric.core.page.PageParam;
+import com.eric.repository.IProdTagReferenceDao;
 import com.eric.repository.IProductDao;
+import com.eric.repository.ISkuDao;
 import com.eric.repository.dto.SearchProdDto;
 import com.eric.repository.entity.Product;
 import com.eric.service.ProductService;
@@ -20,6 +23,10 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
     @Resource
     private IProductDao mProductDao;
+    @Resource
+    private ISkuDao mSkuDao;
+    @Resource
+    private IProdTagReferenceDao mProdTagReferenceDao;
     @Override
     public Product getItem(Long prodId) {
         List<Product> list = mProductDao.selectItem(prodId);
@@ -69,6 +76,15 @@ public class ProductServiceImpl implements ProductService {
 //            }
 //        }
         return searchProdDtoPage;
+    }
+
+    @Override
+    public void saveProduct(Product product) {
+       int prodId= mProductDao.insert(product);
+        if (CollectionUtil.isNotEmpty(product.getSkuList())) {
+            mSkuDao.insertBatch((long) prodId, product.getSkuList());
+        }
+        mProdTagReferenceDao.insertBatch(product.getShopId(), product.getProdId(), product.getTagList());
     }
 
 

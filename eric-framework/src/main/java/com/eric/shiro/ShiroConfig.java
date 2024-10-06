@@ -175,10 +175,13 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/user/login/username", "anon");
         filterChainDefinitionMap.put("/user/login", "anon");
         filterChainDefinitionMap.put("/user/register/username", "anon");
-        filterChainDefinitionMap.put("/user//query/users", "anon");
+        filterChainDefinitionMap.put("/user/query/users", "anon");
+        filterChainDefinitionMap.put("/user/page", "anon");
         filterChainDefinitionMap.put("/user/login/v2/username", "anon");
         filterChainDefinitionMap.put("/prod/**", "anon");
         filterChainDefinitionMap.put("/category/**", "anon");
+        filterChainDefinitionMap.put("/prod/sys/info", "anon");
+
         filterChainDefinitionMap.put("/prod/info", "anon");
         filterChainDefinitionMap.put("/prod/page", "anon");
         filterChainDefinitionMap.put("/prod/newProd", "anon");
@@ -189,8 +192,6 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/chat/**", "anon");
         filterChainDefinitionMap.put("/upload/**", "anon");
         filterChainDefinitionMap.put("/search/**", "anon");
-
-
 
         filterChainDefinitionMap.put("/sys/menu/nav", "anon");
         filterChainDefinitionMap.put("/advertisement", "anon");
@@ -205,6 +206,7 @@ public class ShiroConfig {
 
         // http://106.14.58.169:8089/source/eric4j/home_banner2.jpg
         // 以下四个 为 静态资源
+        filterChainDefinitionMap.put("/static/**", "anon");
         filterChainDefinitionMap.put("/source/test/**", "anon");
         filterChainDefinitionMap.put("/source/avatar/**", "anon");
         filterChainDefinitionMap.put("/source/chensheng/**", "anon");

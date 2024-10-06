@@ -2,6 +2,8 @@ package com.eric.controller;
 
 
 import com.eric.BaseResponse;
+import com.eric.constant.Constant;
+import com.eric.jwt.JwtUtils;
 import com.eric.repository.entity.Product;
 import com.eric.repository.entity.SysMenu;
 import com.eric.service.ProductService;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController // 相当于@ResponseBody和@Controller
@@ -33,11 +36,14 @@ public class SysMenuController extends BaseController {
      */
     @RequestMapping(value = {"/nav"}, method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
     @Operation(summary = "获取用户所拥有的菜单和权限" , description = "通过登陆用户的userId获取用户所拥有的菜单和权限")
-    public BaseResponse<List<SysMenu>> nav(String userId) {
+    public BaseResponse<List<SysMenu>> nav(HttpServletRequest request) {
+        String token = request.getHeader(Constant.ACCESS_TOKEN);
+        String userId = String.valueOf(JwtUtils.getUserId(token));
+
         BaseResponse<List<SysMenu>> responseEntity;
         try {
             logger.info("nav :" + ",userId = " + userId);
-            List<SysMenu> menuList = mService.listMenuByUserId(Long.parseLong(userId));
+            List<SysMenu> menuList = mService.listMenuByUserId(userId);
             responseEntity = new BaseResponse<>(0, "成功");
             responseEntity.setData(menuList);
         } catch (Exception e) {

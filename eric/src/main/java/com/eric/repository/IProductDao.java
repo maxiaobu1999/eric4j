@@ -3,6 +3,7 @@ package com.eric.repository;
 import com.eric.core.domain.entity.UserEntity;
 import com.eric.core.page.PageParam;
 import com.eric.repository.dto.SearchProdDto;
+import com.eric.repository.entity.Order;
 import com.eric.repository.entity.Product;
 import com.eric.repository.entity.Sku;
 import org.apache.ibatis.annotations.*;
@@ -70,9 +71,15 @@ public interface IProductDao {
             "</script>"
     })
     List<SearchProdDto> getSearchProdDtoPageByProdName(int current, int size, @Param("prodName") String prodName, @Param("sort") int sort,@Param("order") int orderBy);
-//    @Select("SELECT p.prod_id, p.pic,p.prod_name,p.price,count(pc.prod_comm_id) as prod_comm_number FROM tz_prod p " +
-//            "LEFT JOIN tz_prod_comm pc ON  p.prod_id=pc.prod_id AND  pc.`status`=1 " +
-//            "where prod_name like concat('%',#{prodName} ,'%') GROUP BY p.prod_id ")
+
+    @Insert("INSERT INTO tz_prod(shop_id,prod_name,ori_price,price,brief,pic,imgs,status," +
+            "category_id,sold_num,total_stocks,delivery_mode,delivery_template_id,create_time,update_time,content,putaway_time," +
+            "version)" +
+            "values(#{shopId},#{prodName},#{oriPrice},#{price},#{brief},#{pic},#{imgs},#{status}," +
+            "#{categoryId},#{soldNum},#{totalStocks},#{deliveryMode},#{deliveryTemplateId},NOW(),NOW(),#{content},#{putawayTime}," +
+            "#{version})")
+    @Options(useGeneratedKeys = true, keyProperty = "prodId", keyColumn = "prod_id")//单条插入返回主键
+    int insert(Product product);
 
 
 }

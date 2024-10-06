@@ -4,12 +4,13 @@ import com.eric.repository.entity.Sku;
 import com.eric.repository.entity.Transport;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
 
 import java.util.List;
 
 /**
- * @author lanhai
  */
+@Data
 public class ProductDto {
 
 
@@ -88,119 +89,5 @@ public class ProductDto {
     @Schema(description = "运费信息" , required = true)
     private Transport transport;
 
-    public static interface WithNoContent{}
-
-    public static interface WithContent extends WithNoContent{}
-    public Long getShopId() {
-        return shopId;
-    }
-
-    public void setShopId(Long shopId) {
-        this.shopId = shopId;
-    }
-
-    public String getShopName() {
-        return shopName;
-    }
-
-    public void setShopName(String shopName) {
-        this.shopName = shopName;
-    }
-
-    public Long getProdId() {
-        return prodId;
-    }
-
-    public void setProdId(Long prodId) {
-        this.prodId = prodId;
-    }
-
-    public String getProdName() {
-        return prodName;
-    }
-
-    public void setProdName(String prodName) {
-        this.prodName = prodName;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public Double getOriPrice() {
-        return oriPrice;
-    }
-
-    public void setOriPrice(Double oriPrice) {
-        this.oriPrice = oriPrice;
-    }
-
-    public Integer getTotalStocks() {
-        return totalStocks;
-    }
-
-    public void setTotalStocks(Integer totalStocks) {
-        this.totalStocks = totalStocks;
-    }
-
-    public String getBrief() {
-        return brief;
-    }
-
-    public void setBrief(String brief) {
-        this.brief = brief;
-    }
-
-    public String getPic() {
-        return pic;
-    }
-
-    public void setPic(String pic) {
-        this.pic = pic;
-    }
-
-    public String getImgs() {
-        return imgs;
-    }
-
-    public void setImgs(String imgs) {
-        this.imgs = imgs;
-    }
-
-    public Long getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    public List<Sku> getSkuList() {
-        return skuList;
-    }
-
-    public void setSkuList(List<Sku> skuList) {
-        this.skuList = skuList;
-    }
-
-    public Transport getTransport() {
-        return transport;
-    }
-
-    public void setTransport(Transport transport) {
-        this.transport = transport;
-    }
 
 }

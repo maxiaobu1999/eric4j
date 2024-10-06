@@ -12,6 +12,7 @@ import com.eric.service.UserService;
 import com.eric.utils.PasswordUtils;
 import com.eric.utils.StringUtils;
 import com.eric.utils.Util;
+import com.github.pagehelper.PageHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -352,6 +353,27 @@ public class UserController extends BaseController {
     public BaseResponse<ArrayList<UserEntity>> queryAllUsers() {
         BaseResponse<ArrayList<UserEntity>> responseEntity;
         try {
+            ArrayList<UserEntity> userEntities = mUserService.queryAllUser();
+            responseEntity = new BaseResponse<>(0, "查询成功");
+            responseEntity.setData(userEntities);
+        } catch (Exception e) {
+            e.printStackTrace();
+            responseEntity = new BaseResponse<>(-1, "修改密码失败，为啥不知道");
+        }
+        return responseEntity;
+    }
+
+    /**
+     * 查询用户列表
+     * http://localhost:8089/user/page
+     */
+    @SuppressWarnings("Duplicates")
+    @RequestMapping(value = {"/page"}, method = {RequestMethod.POST, RequestMethod.GET})
+    public BaseResponse<ArrayList<UserEntity>> usersPage(int pageNum, int pageSize) {
+        BaseResponse<ArrayList<UserEntity>> responseEntity;
+        logger.info("usersPage" + ",pageNum:" + pageNum);
+        try {
+            PageHelper.startPage(pageNum, pageSize);
             ArrayList<UserEntity> userEntities = mUserService.queryAllUser();
             responseEntity = new BaseResponse<>(0, "查询成功");
             responseEntity.setData(userEntities);

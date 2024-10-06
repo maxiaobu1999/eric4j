@@ -94,7 +94,6 @@ public class CategoryController extends BaseController {
      */
     @RequestMapping(value = {"/listCategory"}, method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
     public BaseResponse<List<CategoryEntity>> listCategory() {
-
         BaseResponse<List<CategoryEntity>> responseEntity;
         try {
             List<CategoryEntity> list = mService.SelectAll();

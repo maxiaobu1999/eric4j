@@ -25,7 +25,7 @@ public interface SysMenuDao {
             @Result(property="parentId",column="parent_id"),
             @Result(property="orderNum",column="order_num")
     })
-    ArrayList<SysMenu> listMenuByUserId(Long userId);
+    ArrayList<SysMenu> listMenuByUserId(String userId);
 
     @Select("SELECT * FROM tz_sys_menu ")
     @Results({

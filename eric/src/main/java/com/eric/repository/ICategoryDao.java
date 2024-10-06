@@ -37,11 +37,6 @@ public interface ICategoryDao {
 
 
     @Select("SELECT * FROM tz_category ")
-    @Results({
-            @Result(id=true,property="id",column="category_id"),
-            @Result(property="name",column="category_name"),
-            @Result(property="pic",column="pic")
-    })
     ArrayList<CategoryEntity> selectAll();
 
 

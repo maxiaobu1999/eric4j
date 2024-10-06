@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
 <!--http://10.88.27.192:8089/static/sendMessage.html-->
+
+<!--客服id： 592224971695198208-->
+<!--eric id： 579068904958201856-->
 	<head>
 		<meta charset="utf-8">
 		<title>Java后端WebSocket的Tomcat实现</title>
@@ -10,10 +13,10 @@
 	<body>
 		<div id="main" style="width: 200px;height:80px;"></div>
 		一、建立链接<br/>
-		<input id="fromUser" type="text" /><a>谁发的，发送者的标识，数字字母,中文不行</a><br/>
+		<input id="fromUser" type="text"  value="592224971695198208" /><a>谁发的，发送者的标识，数字字母,中文不行</a><br/>
 		<button onclick="connect()">建立WebSocket连接</button><br/>
 		二、发消息<br/>
-        <input id="toUser" type="text" /><a>发给谁的，接受者的标识，数字字母,中文不行</a><br/>
+        <input id="toUser" type="text" value="579068904958201856" /><a>发给谁的，接受者的标识，数字字母,中文不行</a><br/>
         <input id="text" type="text" /><a>消息内容</a><br/>
 		<button onclick="send()">发送消息</button>
 		<hr/>
@@ -41,7 +44,8 @@
 			var message = document.getElementById('text').value;
 			var formUser = document.getElementById('fromUser').value;
 			var toUser = document.getElementById('toUser').value;
-			websocket.send('{"type":"chat","data":{"fromUser":"'+formUser+'","toUser":"'+ toUser+'","content":"' + message + '"}}');
+			var timestamp = Date.parse(new Date());
+			websocket.send('{"type":"singleChat","data":{"fromId":"'+formUser+'","toId":"'+ toUser +'","content":"' + message  +'","msgType":"' + 'text' +'","message":"' + '-1' +'","stamp":"' + timestamp + '"}}');
 			setMessageInnerHTML(message + "&#13;");
 		}
 
@@ -50,7 +54,7 @@
 			if('WebSocket' in window) {
 				//改成你的地址
 				var fromUser = document.getElementById('fromUser').value;
-				websocket = new WebSocket("ws://10.88.27.192:8089/websocket/"+fromUser);
+				websocket = new WebSocket("ws://192.168.2.102:8089/websocket/"+fromUser);
 
 				//连接发生错误的回调方法
 				websocket.onerror = function() {

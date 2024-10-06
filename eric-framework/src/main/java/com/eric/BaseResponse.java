@@ -36,6 +36,13 @@ public class BaseResponse<T> implements Serializable {
         return serverResponseEntity;
     }
 
+    public static <T> BaseResponse<T> fail() {
+        BaseResponse<T> serverResponseEntity = new BaseResponse<>();
+        serverResponseEntity.setCode(1);
+        serverResponseEntity.setMsg("失败");
+        return serverResponseEntity;
+    }
+
 //    @ApiModelProperty(value = "状态码，0:成功, -1:token过期, -2:参数错误, -3:其他已知错误, -4:其他未知错误。 其他状态码见方法说明", example = "-2", required = true)
     private int code;
 //    @ApiModelProperty(value = "具体数据")

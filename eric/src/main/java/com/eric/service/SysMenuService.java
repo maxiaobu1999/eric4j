@@ -28,6 +28,6 @@ public interface SysMenuService  {
 	 * @param userId 用户id
 	 * @return 菜单列表
 	 */
-	List<SysMenu> listMenuByUserId(Long userId);
+	List<SysMenu> listMenuByUserId(String userId);
 
 }
