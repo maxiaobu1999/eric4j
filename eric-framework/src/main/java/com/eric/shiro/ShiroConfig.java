@@ -193,7 +193,6 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/upload/**", "anon");
         filterChainDefinitionMap.put("/search/**", "anon");
 
-        filterChainDefinitionMap.put("/sys/menu/nav", "anon");
         filterChainDefinitionMap.put("/advertisement", "anon");
         filterChainDefinitionMap.put("/weather", "anon");
         filterChainDefinitionMap.put("/notice/list", "anon");

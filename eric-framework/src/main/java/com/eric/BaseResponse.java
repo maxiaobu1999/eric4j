@@ -45,6 +45,10 @@ public class BaseResponse<T> implements Serializable {
 
 //    @ApiModelProperty(value = "状态码，0:成功, -1:token过期, -2:参数错误, -3:其他已知错误, -4:其他未知错误。 其他状态码见方法说明", example = "-2", required = true)
     private int code;
+
+
+
+    private int total;
 //    @ApiModelProperty(value = "具体数据")
     private T   data;
 //    @ApiModelProperty(value = "处理结果描述", example = "参数错误")
@@ -101,5 +105,12 @@ public class BaseResponse<T> implements Serializable {
 
     public void setToken(String token) {
         this.token = token;
+    }
+    public int getTotal() {
+        return total;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
     }
 }

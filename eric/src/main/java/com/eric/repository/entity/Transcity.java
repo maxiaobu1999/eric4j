@@ -5,9 +5,8 @@ package com.eric.repository.entity;
 import java.io.Serializable;
 
 /**
- * @author lanhai
+ * tz_transcity
  */
-//@TableName("tz_transcity")
 public class Transcity implements Serializable {
 
 

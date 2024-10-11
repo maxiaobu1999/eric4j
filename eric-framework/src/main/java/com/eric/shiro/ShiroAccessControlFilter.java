@@ -42,7 +42,7 @@ public class ShiroAccessControlFilter extends AccessControlFilter {
     @Override
     protected boolean isAccessAllowed(ServletRequest servletRequest, ServletResponse servletResponse, Object o) throws Exception {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-        log.info(request.getMethod());
+        log.info("isAccessAllowed: " + request.getMethod());
         // 去除Session,每次都要验证token
         // Subject subject = getSubject(servletRequest, servletResponse);
         // 获取Subject，然后调用isAuthenticated()判断是否已经认证过了
@@ -66,9 +66,7 @@ public class ShiroAccessControlFilter extends AccessControlFilter {
         log.info("onAccessDenied = " + request.getMethod());
         log.info("onAccessDenied = " + request.getRequestURL().toString());
         boolean access = true;
-//        if (request.getMethod().equalsIgnoreCase("OPTIONS")){
-//            return access;
-//        }
+
         //判断客户端是否携带accessToken
         try {
             String accessToken = request.getHeader(Constant.ACCESS_TOKEN);
@@ -114,7 +112,7 @@ public class ShiroAccessControlFilter extends AccessControlFilter {
             String curOrigin = reqs.getHeader("Origin");
             HttpServletResponse response = (HttpServletResponse) res;
             response.setHeader("Access-Control-Allow-Origin", "*");
-            response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, HEAD");
+            response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, HEAD, PUT");
             response.setHeader("Access-Control-Max-Age", "3600");
 //            response.setHeader("Access-Control-Allow-Headers", "access-control-allow-headers, access-control-allow-methods, access-control-allow-origin, authorization");
             response.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers,CompanyId,TrackId, Authorization");

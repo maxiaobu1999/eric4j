@@ -2,12 +2,10 @@ package com.eric.shiro.realm;
 
 
 import com.auth0.jwt.interfaces.Claim;
-import com.eric.constant.Constant;
 import com.eric.core.domain.entity.UserEntity;
 import com.eric.jwt.JwtUtils;
 import com.eric.redis.RedisUtils;
 import com.eric.shiro.BearerAuthToken;
-import com.eric.shiro.service.SysLoginService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -21,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Resource;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 /**
  * shiro 数据源
@@ -39,8 +36,6 @@ public class ShiroRealm extends AuthorizingRealm {
 //    @Autowired
 //    private ISysRoleService roleService;
 //
-    @Autowired
-    private SysLoginService loginService;
 //
 //    @Autowired
 //    private ISysDeptService deptService;

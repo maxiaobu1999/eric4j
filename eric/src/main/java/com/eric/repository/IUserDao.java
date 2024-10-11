@@ -36,7 +36,7 @@ public interface IUserDao {
     /**
      * 根据userId获取删除用户信息
      */
-    @Delete("delete from tz_user where userId=#{userId} ")
+    @Delete("DELETE FROM tz_user WHERE userId=#{userId} ")
     void deleteByUserId(Long userId);
     /**
      * 根据username获取查询用户信息

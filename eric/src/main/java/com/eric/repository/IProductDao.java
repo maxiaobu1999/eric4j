@@ -31,9 +31,9 @@ public interface IProductDao {
     @Select("SELECT * FROM tz_prod WHERE  prod_id   BETWEEN #{param1}  AND #{param2}")
     ArrayList<Product> selectRange(int start, int end);
 
-    @Update("update tz_prod set " +
+    @Update("UPDATE tz_prod SET " +
             "total_stocks=total_stocks - #{totalStocks}," + "version=version + 1 " +
-            "where prod_id=#{prodId} AND #{totalStocks} <= total_stocks")
+            "WHERE prod_id=#{prodId} AND #{totalStocks} <= total_stocks")
     int updateStocks(Product product);
 
     /**

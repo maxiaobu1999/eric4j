@@ -1,5 +1,6 @@
 package com.eric.repository.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -8,13 +9,11 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 配送方式
+ * 运费模板 tz_transport
  */
-//@TableName("tz_transport")
+@JsonIgnoreProperties(ignoreUnknown = true)// 解决HttpMessageNotReadableException https://blog.csdn.net/fenfenguai/article/details/121752586
 public class Transport implements Serializable {
     private static final long serialVersionUID = 1876655654053364580L;
-
-
     /**
      * 运费模板id
      */

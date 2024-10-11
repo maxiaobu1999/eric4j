@@ -2,13 +2,13 @@ package com.eric.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.eric.exception.base.BaseException;
+import com.eric.repository.IAreaDao;
 import com.eric.repository.ITranscityDao;
 import com.eric.repository.ITransportDao;
 import com.eric.repository.ITransfeeDao;
 import com.eric.repository.entity.*;
 import com.eric.service.TransportService;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,20 +23,20 @@ import java.util.stream.Collectors;
 public class TransportServiceImpl  implements TransportService {
 
 	@Resource
-	private  ITransportDao transportMapper;
+	private  ITransportDao mTransportMapper;
 
 	@Resource
-	private ITransfeeDao  transfeeMapper;
+	private ITransfeeDao mTransfeeMapper;
 
 	@Resource
-	private  ITranscityDao transcityMapper;
-
+	private  ITranscityDao mTranscityMapper;
+	@Resource
+	private IAreaDao mAreaDao;
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void insertTransportAndTransfee(Transport transport) {
-
 		// 插入运费模板
-		transportMapper.insert(transport);
+		mTransportMapper.insert(transport);
 		// 插入所有的运费项和城市
 		insertTransfeeAndTranscity(transport);
 
@@ -53,23 +53,24 @@ public class TransportServiceImpl  implements TransportService {
 		Transport dbTransport = getTransportAndAllItems(transport.getTransportId());
 
 		// 删除所有的运费项
-		transfeeMapper.deleteByTransportId(transport.getTransportId());
+		mTransfeeMapper.deleteByTransportId(transport.getTransportId());
 		// 删除所有的指定包邮条件项
-		transfeeMapper.deleteTransfeeFreesByTransportId(transport.getTransportId());
+		mTransfeeMapper.deleteTransfeeFreesByTransportId(transport.getTransportId());
 
-		List<Long> transfeeIds = dbTransport.getTransfees().stream().map(Transfee::getTransfeeId).collect(Collectors.toList());
+		if (dbTransport.getTransfees() != null) {
+			List<Long> transfeeIds = dbTransport.getTransfees().stream().map(Transfee::getTransfeeId).collect(Collectors.toList());
+			mTranscityMapper.deleteBatchByTransfeeIds(transfeeIds);
+		}
 		List<Long> transfeeFreeIds = dbTransport.getTransfeeFrees().stream().map(TransfeeFree::getTransfeeFreeId).collect(Collectors.toList());
 
-
 		// 删除所有运费项包含的城市
-		transcityMapper.deleteBatchByTransfeeIds(transfeeIds);
 		if(CollectionUtil.isNotEmpty(transfeeFreeIds)) {
 			// 删除所有指定包邮条件项包含的城市
-			transcityMapper.deleteBatchByTransfeeFreeIds(transfeeFreeIds);
+			mTranscityMapper.deleteBatchByTransfeeFreeIds(transfeeFreeIds);
 		}
 
 		// 更新运费模板
-		transportMapper.updateById(transport);
+		mTransportMapper.updateById(transport);
 
 		// 插入所有的运费项和城市
 		insertTransfeeAndTranscity(transport);
@@ -87,7 +88,7 @@ public class TransportServiceImpl  implements TransportService {
 			transfeeFree.setTransportId(transportId);
 		}
 		// 批量插入指定包邮条件项 并返回指定包邮条件项 id，供下面循环使用
-		transfeeMapper.insertTransfeeFrees(transfeeFrees);
+		mTransfeeMapper.insertTransfeeFrees(transfeeFrees);
 
 		List<TranscityFree> transcityFrees = new ArrayList<>();
 		for (TransfeeFree transfeeFree : transfeeFrees) {
@@ -106,7 +107,7 @@ public class TransportServiceImpl  implements TransportService {
 
 		// 批量插入指定包邮条件项中的城市
 		if (CollectionUtil.isNotEmpty(transcityFrees)) {
-			transcityMapper.insertTranscityFrees(transcityFrees);
+			mTranscityMapper.insertTranscityFrees(transcityFrees);
 		}
 	}
 
@@ -117,7 +118,7 @@ public class TransportServiceImpl  implements TransportService {
 			transfee.setTransportId(transportId);
 		}
 		// 批量插入运费项 并返回运费项id，供下面循环使用
-		transfeeMapper.insertTransfees(transfees);
+		mTransfeeMapper.insertTransfees(transfees);
 
 		List<Transcity> transcities = new ArrayList<>();
 		for (Transfee transfee : transfees) {
@@ -136,7 +137,7 @@ public class TransportServiceImpl  implements TransportService {
 
 		// 批量插入运费项中的城市
 		if (CollectionUtil.isNotEmpty(transcities)) {
-			transcityMapper.insertTranscities(transcities);
+			mTranscityMapper.insertTranscities(transcities);
 		}
 	}
 
@@ -147,36 +148,52 @@ public class TransportServiceImpl  implements TransportService {
 
 		for (Long id : ids) {
 			Transport dbTransport = getTransportAndAllItems(id);
-			List<Long> transfeeIds = dbTransport.getTransfees().stream().map(Transfee::getTransfeeId).collect(Collectors.toList());
-			// 删除所有运费项包含的城市
-			transcityMapper.deleteBatchByTransfeeIds(transfeeIds);
+			if (dbTransport.getTransfees()!=null ) {
+				List<Long> transfeeIds = dbTransport.getTransfees().stream().map(Transfee::getTransfeeId).collect(Collectors.toList());
+				// 删除所有运费项包含的城市
+				mTranscityMapper.deleteBatchByTransfeeIds(transfeeIds);
+			}
 			// 删除所有的运费项
-			transfeeMapper.deleteByTransportId(id);
+			mTransfeeMapper.deleteByTransportId(id);
 		}
 		// 删除运费模板
-		transportMapper.deleteTransports(ids);
+		mTransportMapper.deleteTransports(ids);
 	}
 
 
 	@Override
 //	@Cacheable(cacheNames = "TransportAndAllItems", key = "#transportId")
 	public Transport getTransportAndAllItems(Long transportId) {
-		List<Transport> transports = transportMapper.getTransportAndTransfeeAndTranscity(transportId);
-		if (transports.isEmpty()) {
-			return null;
-		}
-		Transport transport= transports.get(0);
+		Transport transport = mTransportMapper.selectById(transportId);
 		if (transport == null) {
 			return null;
 		}
-		List<TransfeeFree> transfeeFrees = transportMapper.getTransfeeFreeAndTranscityFreeByTransportId(transportId);
+		//	查运费项
+		List<Transfee> transfees = mTransfeeMapper.selectByTransportId(transportId);
+		// 运费项相关城市
+		for (Transfee transfee : transfees) {
+			List<Transcity> transcities = mTranscityMapper.selectByTransfeeId(transfee.getTransfeeId());
+			List<Area> cityList = new ArrayList<>();
+			for (Transcity transcity : transcities) {
+				cityList.add(mAreaDao.getById(transcity.getCityId()));
+			}
+			transfee.setCityList(cityList);
+		}
+		transport.setTransfees(transfees);
+		// 查包邮
+		List<TransfeeFree> transfeeFrees = mTransportMapper.getTransfeeFreeAndTranscityFreeByTransportId(transportId);
 		transport.setTransfeeFrees(transfeeFrees);
 		return transport;
 	}
 
 	@Override
-	@CacheEvict(cacheNames = "TransportAndAllItems", key = "#transportId")
+//	@CacheEvict(cacheNames = "TransportAndAllItems", key = "#transportId")
 	public void removeTransportAndAllItemsCache(Long transportId) {
 
+	}
+
+	@Override
+	public List<Transport> list(Long shopId) {
+		return mTransportMapper.list(shopId);
 	}
 }

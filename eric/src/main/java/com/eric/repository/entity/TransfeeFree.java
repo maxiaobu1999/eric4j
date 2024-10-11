@@ -1,13 +1,15 @@
 package com.eric.repository.entity;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
 
 /**
- * 包邮
+ * 指定条件包邮项
+ * tz_transfee_free
  */
-//@TableName("tz_transfee_free")
+@Data
 public class TransfeeFree implements Serializable {
     private static final long serialVersionUID = -2811714952219888223L;
 
@@ -21,7 +23,6 @@ public class TransfeeFree implements Serializable {
     /**
      * 运费模板id
      */
-
     @Schema(description = "运费模板id" ,required=true)
     private Long transportId;
 
@@ -51,51 +52,4 @@ public class TransfeeFree implements Serializable {
     private List<Area> freeCityList;
 
 
-    public Long getTransfeeFreeId() {
-        return transfeeFreeId;
-    }
-
-    public void setTransfeeFreeId(Long transfeeFreeId) {
-        this.transfeeFreeId = transfeeFreeId;
-    }
-
-    public Long getTransportId() {
-        return transportId;
-    }
-
-    public void setTransportId(Long transportId) {
-        this.transportId = transportId;
-    }
-
-    public Integer getFreeType() {
-        return freeType;
-    }
-
-    public void setFreeType(Integer freeType) {
-        this.freeType = freeType;
-    }
-
-    public Double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Double amount) {
-        this.amount = amount;
-    }
-
-    public Double getPiece() {
-        return piece;
-    }
-
-    public void setPiece(Double piece) {
-        this.piece = piece;
-    }
-
-    public List<Area> getFreeCityList() {
-        return freeCityList;
-    }
-
-    public void setFreeCityList(List<Area> freeCityList) {
-        this.freeCityList = freeCityList;
-    }
 }

@@ -2,14 +2,16 @@
 package com.eric.repository.entity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
 
 /**
- * @author lanhai
+ * 地区名称树状表
+ * tz_area
  */
-//@TableName("tz_area")
+@Data
 public class Area implements Serializable {
     private static final long serialVersionUID = -6013320537436191451L;
 
@@ -29,44 +31,4 @@ public class Area implements Serializable {
     private List<Area> areas;
 
 
-
-    public Long getAreaId() {
-        return areaId;
-    }
-
-    public void setAreaId(Long areaId) {
-        this.areaId = areaId;
-    }
-
-    public String getAreaName() {
-        return areaName;
-    }
-
-    public void setAreaName(String areaName) {
-        this.areaName = areaName;
-    }
-
-    public Long getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(Long parentId) {
-        this.parentId = parentId;
-    }
-
-    public Integer getLevel() {
-        return level;
-    }
-
-    public void setLevel(Integer level) {
-        this.level = level;
-    }
-
-    public List<Area> getAreas() {
-        return areas;
-    }
-
-    public void setAreas(List<Area> areas) {
-        this.areas = areas;
-    }
 }

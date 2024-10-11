@@ -47,9 +47,9 @@ public interface IOrderDao {
     })
     List<MyOrderDto> listMyOrderByUserIdAndStatus(@Param("userId") String userId, @Param("status") int status);
 
-    @Select({"select oi.* from tz_order_item oi ",
-            "inner join tz_order o on o.order_number = oi.order_number ",
-            "where oi.order_number=#{orderNum} "
+    @Select({"SELECT oi.* FROM tz_order_item oi ",
+            "INNER JOIN tz_order o ON o.order_number = oi.order_number ",
+            "WHERE oi.order_number=#{orderNum} "
     })
     List<MyOrderItemDto> listMyOrderItemByOrderNum(@Param("orderNum") String orderNum);
 
