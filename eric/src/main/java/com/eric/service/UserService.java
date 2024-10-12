@@ -47,6 +47,24 @@ public interface UserService {
 
     /** 查找账户，手机号 */
     UserEntity findAccountByPhoneNum(String phoneNum);
+    /**
+     * 用户注册数量
+     *
+     * @return Integer
+     */
+    Integer registerUserNum();
+
+
+    /**
+     * 更新用户登录日期
+     *
+     */
+    void updateLoginDate(String userId);
+
+
+
+
+
 
 //
 //

@@ -4,25 +4,28 @@ package com.eric.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.eric.BaseResponse;
-import com.eric.repository.entity.AdvertisementEntity;
-import com.eric.repository.entity.NoticeEntity;
-import com.eric.repository.entity.Product;
-import com.eric.repository.entity.WeatherEntity;
-import com.eric.service.AdvertisementService;
-import com.eric.service.ProductService;
-import com.eric.service.SmsCodeService;
+import com.eric.constant.Constant;
+import com.eric.core.domain.entity.UserEntity;
+import com.eric.jwt.JwtUtils;
+import com.eric.redis.RedisUtils;
+import com.eric.repository.ConfigItemVo;
+import com.eric.repository.dto.DiscountChartReqVo;
+import com.eric.repository.dto.PigChartResVo;
+import com.eric.repository.entity.*;
+import com.eric.service.*;
 import com.github.pagehelper.PageHelper;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.spring.web.json.Json;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController // 相当于@ResponseBody和@Controller
@@ -35,9 +38,92 @@ public class CommonController extends BaseController {
 //    private TokenManager mTokenManager;
     @Resource
     private AdvertisementService mAdvertisementService;
+    @Resource
+    private UserService mUserService;
+    @Resource
+    private ConfigService mConfigService;
+    @Resource
+    private RedisUtils redisUtils;
 
+    /**
+     * 查询用户数量
+     * <p>
+     * http://localhost:8089/home/count
+     *
+     * @return 用户信息
+     */
 
+    @RequestMapping(value = {"/home/count"}, method = {RequestMethod.GET})
+    public BaseResponse<HomeCountEntity> count(HttpServletRequest request) {
+        try {
+            HomeCountEntity res = new HomeCountEntity();
+            String token = request.getHeader(Constant.ACCESS_TOKEN);
+            logger.info("count" );
+            // 查询用户信息
+            Long userId = JwtUtils.getUserId(token);
+            Integer registerNum = mUserService.registerUserNum();
+            res.setRegisterNum(registerNum);
+            res.setOnLineNum((Integer) redisUtils.get(Constant.DAILY_VISITS_KEY));
+            ArrayList<UserEntity> userList = mUserService.queryAllUser();
+           return  BaseResponse.success(res);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return  BaseResponse.fail(e.getMessage());
+        }
+    }
 
+    @ApiOperation(value = "首页饼图")
+//    @Log(title = "获取首页统计数据", action = "获取首页统计数据")
+    @RequestMapping(value = {"/home/pieChart"}, method = {RequestMethod.GET})
+    public BaseResponse<HashMap<String, Object>> pieChart(HttpServletRequest request) {
+        try {
+            logger.info("pieChart" );
+            HashMap<String, Object> map = new HashMap<>();
+            List<PigChartResVo> pigChartResVos = new ArrayList<>();
+            PigChartResVo pigChartResVo1 = new PigChartResVo();
+            pigChartResVo1.setCountry("cn");
+            pigChartResVo1.setCustomerNum(7);
+            pigChartResVos.add(pigChartResVo1);
+
+            PigChartResVo pigChartResVo2 = new PigChartResVo();
+            pigChartResVo2.setCountry("en");
+            pigChartResVo2.setCustomerNum(2);
+            pigChartResVos.add(pigChartResVo2);
+            map.put("total", 9);
+            map.put("PigChartResList", pigChartResVos);
+            return  BaseResponse.success(map);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return  BaseResponse.fail(e.getMessage());
+        }
+    }
+
+    @ApiOperation(value = "首页折线图")
+//    @Log(title = "首页折线图", action = "首页折线图")
+    @PostMapping("/home/discountChart")
+    public BaseResponse<HashMap<String, List<String>>> discountChart(HttpServletRequest request,@RequestBody DiscountChartReqVo vo) {
+        try {
+            logger.info("discountChart" );
+            HashMap<String, List<String>> res = mConfigService.discountChart(vo);
+            return  BaseResponse.success(res);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return  BaseResponse.fail(e.getMessage());
+        }
+    }
+
+    @ApiOperation(value = "首页折线图访问类型下拉框")
+//    @Log(title = "首页折现图", action = "首页折线图访问类型下拉框")
+    @GetMapping("/home/accessTypeFilter")
+    public BaseResponse<List<ConfigItemVo>> accessTypeFilter(HttpServletRequest request) {
+        try {
+            logger.info("accessTypeFilter" );
+            return  BaseResponse.success(mConfigService.accessTypeFilter());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return  BaseResponse.fail(e.getMessage());
+        }
+    }
     /**
      * 获取信息
      */

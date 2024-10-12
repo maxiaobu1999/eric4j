@@ -57,6 +57,17 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
+
+    @Override
+    public Integer registerUserNum() {
+        return mAccountDao.registerUserNum();
+    }
+
+    @Override
+    public void updateLoginDate(String userId) {
+        mAccountDao.updateLoginDate(userId);
+    }
+
     @Override
     public void deleteByUserId(Long userId) {
         mAccountDao.deleteByUserId(userId);

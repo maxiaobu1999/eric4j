@@ -7,8 +7,8 @@ import java.io.Serializable;
 
 //@ApiModel
 public class BaseResponse<T> implements Serializable {
-    public static <T> BaseResponse<T> success() {
-        BaseResponse<T> responseEntity = new BaseResponse<>();
+    public static <String> BaseResponse<String> success() {
+        BaseResponse<String> responseEntity = new BaseResponse<>();
         responseEntity.setCode(0);
         responseEntity.setMsg("成功");
         return responseEntity;

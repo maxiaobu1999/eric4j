@@ -59,5 +59,19 @@ public interface IUserDao {
     @Select("SELECT * FROM tz_user where phoneNum=#{phoneNum} ")
     List<UserEntity> findByphoneNum(String phoneNum);
 
+    /**
+     * 用户注册数量
+     *
+     * @return Integer
+     */
+    @Select("SELECT count(1) FROM tz_user")
+    Integer registerUserNum();
+
+    /**
+     * 更新用户登录日期
+     *
+     */
+    @Update("UPDATE tz_user SET user_lasttime=NOW()  WHERE user_id=#{userId}")
+    void updateLoginDate(String UserId);
 
 }

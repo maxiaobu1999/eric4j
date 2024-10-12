@@ -1,9 +1,11 @@
 package com.eric.controller;
 
 
+import cn.hutool.core.date.DateUtil;
 import com.eric.BaseResponse;
 import com.eric.constant.Constant;
 import com.eric.jwt.JwtUtils;
+import com.eric.redis.RedisUtils;
 import com.eric.redis.TokenManager;
 import com.eric.core.domain.entity.UserEntity;
 import com.eric.repository.param.LoginParam;
@@ -24,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import static org.apache.logging.log4j.util.Strings.isEmpty;
+
 @RestController // 相当于@ResponseBody和@Controller
 @RequestMapping(value = "/user")// 配置url映射,一级
 @CrossOrigin(origins = "*")// 解决浏览器跨域问题(局部)
@@ -39,7 +42,8 @@ public class UserController extends BaseController {
     private UserService mUserService;
     @Resource
     private TokenManager mTokenManager;
-
+    @Resource
+    private RedisUtils redisUtils;
 
     /**
      * 账户登录
@@ -52,43 +56,46 @@ public class UserController extends BaseController {
     @SuppressWarnings("Duplicates")
     @RequestMapping(value = {"/login/username"}, method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
     public BaseResponse<UserEntity> loginByUsername(String username, String password) {
-        BaseResponse<UserEntity> responseEntity;
         try {
             logger.info("loginByUsername" + ",username:" + username);
             if (StringUtils.isEmpty(username)) {
-                responseEntity = new BaseResponse<>(1, "用户名是null的");
-                return responseEntity;
+                return BaseResponse.fail("用户名是null的");
             }
             if (StringUtils.isEmpty(password)) {
-                responseEntity = new BaseResponse<>(1, "密码是null的");
-                return responseEntity;
+                return BaseResponse.fail("密码是null的");
             }
             UserEntity userEntity = mUserService.findByName(username);
             if (userEntity == null) {
-                responseEntity = new BaseResponse<>(1, "用户名不存在或密码错误（用户名）");
-                return responseEntity;
+                return BaseResponse.fail("用户名不存在或密码错误（用户名）");
             }
 
             if (!PasswordUtils.matches(userEntity.getSalt(), password, userEntity.getLoginPassword())) {
-                responseEntity = new BaseResponse<>(1, "用户名不存在或密码错误（密码）");
-                return responseEntity;
+                return BaseResponse.fail("用户名不存在或密码错误（密码）");
             }
 
             // 查userId
-            String userId = userEntity.getUserId().toString();
-//            // 更新的token
-//            String token = mTokenManager.generateToken(Long.parseLong(userId));
+            String userId = userEntity.getUserId();
             // 生成 accessToken
             String accessToken = JwtUtils.accessSign(username, Long.valueOf(userId));
+            BaseResponse<UserEntity> res = BaseResponse.success(userEntity);
+            res.setToken(accessToken);
+            String loginTime =DateUtil.format(new Date(), "yyyy-MM-dd");
+            if (userEntity.getUserLasttime()!=null)
+             loginTime = DateUtil.format(userEntity.getUserLasttime(), "yyyy-MM-dd");
+            if (!loginTime.equals(DateUtil.format(new Date(), "yyyy-MM-dd"))) {
+                // 用户首次访问app，访问量+1
+                redisUtils.incr(Constant.DAILY_VISITS_KEY, 1);
+            }
 
-            responseEntity = new BaseResponse<>(0, "登录成功", accessToken);
-            responseEntity.setData(userEntity);
+            mUserService.updateLoginDate(userId);
+
+            return res;
         } catch (Exception e) {
             e.printStackTrace();
-            responseEntity = new BaseResponse<>(-1, "登录失败，为啥不知道");
+            return BaseResponse.fail(e.getMessage());
         }
-        return responseEntity;
     }
+
     /**
      * 账户登录
      * http://localhost:8089/user/login
@@ -174,7 +181,7 @@ public class UserController extends BaseController {
 
             userEntity.setUserId(String.valueOf(Util.createID()));
             int res = mUserService.insertAccount(userEntity);
-            logger.info("registerByUsername=="+res);
+            logger.info("registerByUsername==" + res);
 
             // 返回数据
             responseEntity = new BaseResponse<>(0, "注册成功", String.valueOf(userEntity.getUserId()));
@@ -194,7 +201,7 @@ public class UserController extends BaseController {
      * @return 用户信息
      */
 
-    @RequestMapping(value = {"/info"}, method = {RequestMethod.POST,RequestMethod.GET})
+    @RequestMapping(value = {"/info"}, method = {RequestMethod.POST, RequestMethod.GET})
     public BaseResponse<UserEntity> userInfo(HttpServletRequest request) {
         BaseResponse<UserEntity> responseEntity;
         try {
@@ -210,11 +217,6 @@ public class UserController extends BaseController {
             e.printStackTrace();
             responseEntity = new BaseResponse<>(-1, "获取用户信息，为啥不知道");
         }
-//        try {
-//            Thread.sleep(3000);
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
         return responseEntity;
     }
 
@@ -265,8 +267,6 @@ public class UserController extends BaseController {
     }
 
 
-
-
     /**
      * 注销
      * http://localhost:8089/user/delete/userid?id=509434321728311296
@@ -292,8 +292,6 @@ public class UserController extends BaseController {
         }
         return responseEntity;
     }
-
-
 
 
     /**
@@ -523,9 +521,6 @@ public class UserController extends BaseController {
         }
         return responseEntity;
     }
-
-
-
 
 
 }
