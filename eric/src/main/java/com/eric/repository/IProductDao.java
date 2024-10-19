@@ -41,12 +41,14 @@ public interface IProductDao {
      *
      * @param prodName
      * @param sort
-     * @param orderBy 排序 orderBy sql语句冲突 改order
+     * @param orderBy  排序 orderBy sql语句冲突 改order
      * @return
      */
     @Select({
             "<script>",
-            "SELECT  p.prod_id, p.pic,p.prod_name,p.price ,count(pc.prod_comm_id) as prod_comm_number FROM tz_prod p ",
+            "SELECT  p.prod_id, p.pic,p.prod_name,p.price ,count(pc.prod_comm_id) as prod_comm_number, ",
+            "count( CASE WHEN evaluate = 0 THEN prod_comm_id ELSE null END ) AS praise_number ",
+            "FROM tz_prod p ",
             "LEFT JOIN tz_prod_comm pc ON  p.prod_id=pc.prod_id AND  pc.status=1 ",
             "WHERE prod_name LIKE CONCAT('%',#{prodName} ,'%')GROUP BY p.prod_id ",
             "<if test='sort == 0'> ",
@@ -70,7 +72,7 @@ public interface IProductDao {
             "</if> ",
             "</script>"
     })
-    List<SearchProdDto> getSearchProdDtoPageByProdName(int current, int size, @Param("prodName") String prodName, @Param("sort") int sort,@Param("order") int orderBy);
+    List<SearchProdDto> getSearchProdDtoPageByProdName(int current, int size, @Param("prodName") String prodName, @Param("sort") int sort, @Param("order") int orderBy);
 
     @Insert("INSERT INTO tz_prod(shop_id,prod_name,ori_price,price,brief,pic,imgs,status," +
             "category_id,sold_num,total_stocks,delivery_mode,delivery_template_id,create_time,update_time,content,putaway_time," +
@@ -78,7 +80,8 @@ public interface IProductDao {
             "values(#{shopId},#{prodName},#{oriPrice},#{price},#{brief},#{pic},#{imgs},#{status}," +
             "#{categoryId},#{soldNum},#{totalStocks},#{deliveryMode},#{deliveryTemplateId},NOW(),NOW(),#{content},#{putawayTime}," +
             "#{version})")
-    @Options(useGeneratedKeys = true, keyProperty = "prodId", keyColumn = "prod_id")//单条插入返回主键
+    @Options(useGeneratedKeys = true, keyProperty = "prodId", keyColumn = "prod_id")
+//单条插入返回主键
     int insert(Product product);
 
 

@@ -74,7 +74,7 @@ public interface ICategoryDao {
     /**
      * 根据userId获取删除用户信息
      */
-    @Delete("delete from user where userId=#{userId} ")
+    @Delete("DELETE FROM user WHERE userId=#{userId} ")
     void deleteByUserId(Long userId);
     /**
      * 根据username获取查询用户信息

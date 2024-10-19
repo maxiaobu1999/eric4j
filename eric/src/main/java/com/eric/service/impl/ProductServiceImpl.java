@@ -67,14 +67,14 @@ public class ProductServiceImpl implements ProductService {
     public List<SearchProdDto> getSearchProdDtoPageByProdName(int current,int size, String prodName, int sort, int orderBy) {
 //        List<Product> searchProdDtoPage = null;
         List<SearchProdDto> searchProdDtoPage = mProductDao.getSearchProdDtoPageByProdName(current,size, prodName, sort, orderBy);
-//        for (SearchProdDto searchProdDto : searchProdDtoPage) {
-//            //计算出好评率
-//            if (searchProdDto.getPraiseNumber() == 0 || searchProdDto.getProdCommNumber() == 0) {
-//                searchProdDto.setPositiveRating(0.0);
-//            } else {
-//                searchProdDto.setPositiveRating(Arith.mul(Arith.div(searchProdDto.getPraiseNumber(), searchProdDto.getProdCommNumber()), 100));
-//            }
-//        }
+        for (SearchProdDto searchProdDto : searchProdDtoPage) {
+            //计算出好评率
+            if (searchProdDto.getPraiseNumber() == 0 || searchProdDto.getProdCommNumber() == 0) {
+                searchProdDto.setPositiveRating(0.0);
+            } else {
+                searchProdDto.setPositiveRating(Arith.mul(Arith.div(searchProdDto.getPraiseNumber(), searchProdDto.getProdCommNumber()), 100));
+            }
+        }
         return searchProdDtoPage;
     }
 

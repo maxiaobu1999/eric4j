@@ -1,8 +1,10 @@
 package com.eric.controller;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.eric.BaseResponse;
+import com.eric.repository.dto.HotSearchDto;
 import com.eric.repository.dto.SearchProdDto;
-import com.eric.repository.entity.Product;
+import com.eric.service.HotSearchService;
 import com.eric.service.ProductService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -14,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.List;
 
 @RestController // 相当于@ResponseBody和@Controller
@@ -26,7 +29,42 @@ public class SearchController  extends BaseController{
 
     @Resource
     private ProductService mProductService;
+    @Resource
+    private HotSearchService mHotSearchService;
 
+    @GetMapping("/hotSearchByShopId")
+    @Operation(summary = "查看店铺热搜" , description = "根据店铺id,热搜数量获取热搜")
+    @Parameters({
+            @Parameter(name = "shopId", description = "店铺id" , required = true),
+            @Parameter(name = "number", description = "取数" , required = true),
+            @Parameter(name = "sort", description = "是否按照顺序(0 否 1是)"),
+    })
+    public BaseResponse<List<HotSearchDto>> hotSearchByShopId(Long shopId, Integer number, Integer sort) {
+        List<HotSearchDto> list = mHotSearchService.getHotSearchDtoByShopId(shopId);
+
+        return getListResponseEntity(number, sort, list);
+    }
+
+    @GetMapping("/hotSearch")
+    @Operation(summary = "查看全局热搜" , description = "根据店铺id,热搜数量获取热搜")
+    @Parameters({
+            @Parameter(name = "number", description = "取数" , required = true),
+            @Parameter(name = "sort", description = "是否按照顺序(0 否 1是)", required = false ),
+    })
+    public BaseResponse<List<HotSearchDto>> hotSearch(Integer number,Integer sort) {
+        List<HotSearchDto> list = mHotSearchService.getHotSearchDtoByShopId(0L);
+        return getListResponseEntity(number, sort, list);
+    }
+
+    private BaseResponse<List<HotSearchDto>> getListResponseEntity(Integer number, Integer sort, List<HotSearchDto> list) {
+        if(sort == null || sort == 0){
+            Collections.shuffle(list);
+        }
+        if(!CollectionUtil.isNotEmpty(list) || list.size()< number){
+            return BaseResponse.success(list);
+        }
+        return BaseResponse.success(list.subList(0, number));
+    }
 
     @ApiOperation("分页排序搜索商品")
     @Operation(summary = "分页排序搜索商品", description = "根据商品名搜索")

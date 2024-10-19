@@ -19,7 +19,7 @@ public interface SysMenuDao {
      */
     @Select("SELECT DISTINCT m.menu_id, m.parent_id, m.name, m.url, m.type, m.icon, m.order_num FROM tz_sys_user_role ur " +
             "LEFT JOIN tz_sys_role_menu rm ON ur.role_id = rm.role_id LEFT JOIN tz_sys_menu m ON m.`menu_id` = rm.`menu_id` " +
-            "WHERE ur.user_id = #{userId} and m.type != 2 order by order_num")
+            "WHERE ur.user_id = #{userId} and m.type != 2 order by menu_id")
     @Results({
             @Result(id=true,property="menuId",column="menu_id"),
             @Result(property="parentId",column="parent_id"),
