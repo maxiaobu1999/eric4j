@@ -1,13 +1,10 @@
 package com.eric.repository;
 
-import com.eric.core.domain.entity.UserEntity;
 import com.eric.repository.dto.ShopCartItemDto;
 import com.eric.repository.entity.Basket;
-import com.eric.repository.entity.CategoryEntity;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -63,11 +60,6 @@ public interface IBasketDao {
             "</script>"
     })
     int deleteShopCartItemsByBasketIds(@Param("userId") String userId, @Param("basketIds") List<Long> basketIds);
-
-
-
-
-
 
     /**
      * 根据userId获取删除用户信息
