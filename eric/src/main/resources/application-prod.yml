@@ -1,9 +1,5 @@
 # 开发环境
 
-#端口号，内置对象
-server:
-  port: 8089
-
 const:
   # 服务器地址
   cloud:

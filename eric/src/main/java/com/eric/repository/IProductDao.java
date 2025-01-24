@@ -2,6 +2,7 @@ package com.eric.repository;
 
 import com.eric.core.domain.entity.UserEntity;
 import com.eric.core.page.PageParam;
+import com.eric.repository.dto.ProductDto;
 import com.eric.repository.dto.SearchProdDto;
 import com.eric.repository.entity.Order;
 import com.eric.repository.entity.Product;
@@ -81,8 +82,38 @@ public interface IProductDao {
             "#{categoryId},#{soldNum},#{totalStocks},#{deliveryMode},#{deliveryTemplateId},NOW(),NOW(),#{content},#{putawayTime}," +
             "#{version})")
     @Options(useGeneratedKeys = true, keyProperty = "prodId", keyColumn = "prod_id")
-//单条插入返回主键
+        //单条插入返回主键
     int insert(Product product);
 
+    @Delete("DELETE FROM tz_prod WHERE prod_id=#{prodId} ")
+    void deleteById(Long prodId);
 
+    /**
+     * 根据标签id分页获取商品信息
+     *
+     * @param tagId
+     * @return
+     */
+    @Select("SELECT p.prod_id,  p.pic,p.prod_name,  p.price, p.brief, sd.shop_name " +
+            "FROM  tz_prod p " +
+            "LEFT JOIN tz_prod_tag_reference ptr ON ptr.prod_id=p.prod_id " +
+            "LEFT JOIN tz_prod_tag pt ON pt.id=ptr.tag_id " +
+            "LEFT JOIN tz_shop_detail sd ON p.shop_id=sd.shop_id " +
+            "WHERE pt.id = #{tagId}  AND p.status = 1 " +
+            "ORDER BY p.update_time DESC")
+    List<ProductDto> pageByTagId(@Param("tagId") Long tagId);
+
+
+
+    /**
+     * 根据分类id分页获取商品
+     * @param categoryId
+     * @return
+     */
+    @Select("SELECT tp.*,tc.category_name,tsd.shop_name  " +
+            "FROM  tz_prod tp " +
+            "LEFT JOIN tz_category tc ON tp.category_id = tc.category_id " +
+            "LEFT JOIN  tz_shop_detail tsd  ON tp.shop_id = tsd.shop_id " +
+            "WHERE tp.status = 1 AND tp.category_id = #{categoryId} ")
+    List<ProductDto> pageByCategoryId(@Param("categoryId") Long categoryId);
 }

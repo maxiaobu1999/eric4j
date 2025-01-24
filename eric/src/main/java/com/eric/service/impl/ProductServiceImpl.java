@@ -5,6 +5,7 @@ import com.eric.core.page.PageParam;
 import com.eric.repository.IProdTagReferenceDao;
 import com.eric.repository.IProductDao;
 import com.eric.repository.ISkuDao;
+import com.eric.repository.dto.ProductDto;
 import com.eric.repository.dto.SearchProdDto;
 import com.eric.repository.entity.Product;
 import com.eric.service.ProductService;
@@ -85,6 +86,30 @@ public class ProductServiceImpl implements ProductService {
             mSkuDao.insertBatch((long) prodId, product.getSkuList());
         }
         mProdTagReferenceDao.insertBatch(product.getShopId(), product.getProdId(), product.getTagList());
+    }
+
+    @Override
+    public void removeProductByProdId(Long prodId) {
+        Product dbProduct = mProductDao.selectItem(prodId).get(0);
+
+        mProductDao.deleteById(prodId);
+
+        mSkuDao.deleteByProdId(prodId);
+
+        //删除商品关联的分组标签
+        mProdTagReferenceDao.delete(prodId);
+
+    }
+
+    @Override
+    public List<ProductDto> pageByTagId(Long tagId) {
+        return mProductDao.pageByTagId( tagId);
+    }
+
+    @Override
+    public List<ProductDto> pageByCategoryId(Long categoryId) {
+        return mProductDao.pageByCategoryId( categoryId);
+
     }
 
 

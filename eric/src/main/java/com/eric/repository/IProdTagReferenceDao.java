@@ -39,6 +39,7 @@ public interface IProdTagReferenceDao {
     @Select("SELECT tag_id FROM tz_prod_tag_reference where prod_id=#{prodId} ")
     List<Long> listTagIdByProdId(Long prodId);
 
-
+    @Delete("DELETE FROM tz_prod_tag_reference WHERE prod_id=#{prodId} ")
+    void delete(Long prodId);
 
 }

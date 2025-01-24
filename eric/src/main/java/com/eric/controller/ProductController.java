@@ -12,16 +12,16 @@ import com.eric.repository.entity.Product;
 import com.eric.repository.entity.Sku;
 import com.eric.repository.entity.Transport;
 import com.eric.repository.param.ProductParam;
-import com.eric.service.ProdTagReferenceService;
-import com.eric.service.ProductService;
-import com.eric.service.SkuService;
-import com.eric.service.TransportService;
+import com.eric.service.*;
 import com.eric.utils.Json;
 import com.github.pagehelper.PageHelper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @RestController // 相当于@ResponseBody和@Controller
 @CrossOrigin(origins = "*")// 解决浏览器跨域问题(局部)
@@ -48,6 +49,8 @@ public class ProductController extends BaseController {
     private TransportService mTransportService;
     @Resource
     private ProdTagReferenceService mProdTagReferenceService;
+    @Resource
+    private BasketService mBasketService;
     /**
      * 获取信息
      */
@@ -151,7 +154,28 @@ public class ProductController extends BaseController {
         return responseEntity;
     }
 
-
+    @GetMapping("/prodListByTagId")
+    @Operation(summary = "通过分组标签获取商品列表" , description = "通过分组标签id（tagId）获取商品列表")
+    @Parameters({
+            @Parameter(name = "tagId", description = "当前页，默认为1" , required = true),
+    })
+    public BaseResponse<List<ProductDto>> prodListByTagId(
+            @RequestParam(value = "tagId") Long tagId,int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<ProductDto> productPage = mProductService.pageByTagId( tagId);
+        return BaseResponse.success(productPage);
+    }
+    @GetMapping("/pageProd")
+    @Operation(summary = "通过分类id商品列表信息" , description = "根据分类ID获取该分类下所有的商品列表信息")
+    @Parameters({
+            @Parameter(name = "categoryId", description = "分类ID" , required = true),
+    })
+    public BaseResponse<List<ProductDto>> prodList(
+            @RequestParam(value = "categoryId") Long categoryId,int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<ProductDto> productPage = mProductService.pageByCategoryId( categoryId);
+        return BaseResponse.success(productPage);
+    }
     /**
      * 新品推荐
      */
@@ -161,7 +185,7 @@ public class ProductController extends BaseController {
         BaseResponse<List<Product>> responseEntity;
         try {
             logger.info("newProd");
-            List<Product> list = mProductService.selectRange(100, 105);
+            List<Product> list = mProductService.selectRange(10, 15);
             responseEntity = new BaseResponse<>(0, "成功");
             responseEntity.setData(list);
         } catch (Exception e) {
@@ -170,6 +194,31 @@ public class ProductController extends BaseController {
         }
         return responseEntity;
     }
+
+
+    /**
+     * 批量删除
+     */
+    @DeleteMapping
+    public BaseResponse<String> batchDelete(@RequestBody Long[] prodIds) {
+        for (Long prodId : prodIds) {
+            Product dbProduct = mProductService.getItem(prodId);
+            List<Sku> dbSkus = mSkuService.listByProdId(dbProduct.getProdId());
+            // 删除商品
+            mProductService.removeProductByProdId(prodId);
+
+            for (Sku sku : dbSkus) {
+                mSkuService.removeSkuCacheBySkuId(sku.getSkuId(), sku.getProdId());
+            }
+
+            List<String> userIds = mBasketService.listUserIdByProdId(prodId);
+            for (String userId : userIds) {
+                mBasketService.removeShopCartItemsCacheByUserId(userId);
+            }
+        }
+        return BaseResponse.success();
+    }
+
 
     private void checkParam(ProductParam productParam) {
         if (CollectionUtil.isEmpty(productParam.getTagList())) {
